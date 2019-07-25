@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>Cash Maps</title>
+    </head>
+    <body>
+        <div>
+            Hello
+        </div>
+
+        <hr>
+
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li>{{message}}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+
+        <!--This must be here or nothing that extends this will show up-->
+        {% block content %} {% endblock %}
+    </body>
+<html>
