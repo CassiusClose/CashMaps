@@ -1,5 +1,9 @@
 {% extends 'header.html' %}
 
 {% block content %}
-    <h1>Map</h1> 
+    <script src="https://cesiumjs.org/releases/1.55/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesiumjs.org/releases/1.55/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+    <div id="cesiumContainer"></div>
+    <script src="static/resources/scripts/loadCesium.js"></script>
 {% endblock %}
