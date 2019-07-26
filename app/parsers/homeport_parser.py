@@ -1,8 +1,11 @@
 import re
 import logging as log
 import os
+from app import db
+from flask import abort
 
 log.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"), format='%(message)s')
+
 
 categories = ['metadata', 'author', 'copyright', 'link', 'rte', 'retpt', 'wpt', 'Address', 'PhoneNumber', 'Categories', 'trk', 'trkseg', 'trkpt']
 
@@ -11,7 +14,11 @@ for cat in categories:
     reg_categories.append(cat + '\n')
 
 def process_file(filepath):
-    track_file = open(filepath, 'r')
+    try:
+        track_file = open(filepath, 'r')
+    except IOError:
+        abort(404, "ERROR: Homeport Parser - File not found")
+#        return None
     contents = track_file.read()
     contents = contents.decode("utf-8-sig")
 
@@ -80,4 +87,5 @@ def process_trkseg(string):
 def process_trkpt(string):
     log.info('Ignoring..')
 
-process_file('app/static/resources/track.txt')
+#process_file('../static/resources/track.txt')
+#process_file('app/static/resources/track.txt')
