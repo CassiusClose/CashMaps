@@ -1,18 +1,20 @@
 from app import db
 
 class Track(db.Model):
-    database_id = db.Column(db.Integer, primary_key=True)
+    databaseId = db.Column(db.Integer, primary_key=True)
     track_id = db.Column(db.Integer)
-    segments = db.relationship('Segment', backref='track', lazy='dynamic')
+    segments = db.relationship('TrackSegment', backref='track', lazy='dynamic')
     
-class Track_Segment(db.Model):
-    database_id = db.Column(db.Integer, primary_key=True)
+class TrackSegment(db.Model):
+    databaseId = db.Column(db.Integer, primary_key=True)
     segment_id = db.Column(db.Integer)
-    points = db.relationship('Point', backref='segment', lazy='dynamic')
+    points = db.relationship('TrackPoint', backref='segment', lazy='dynamic')
+    trackId = db.Column(db.Integer, db.ForeignKey('track.track_id'))
 
-class Track_Point(db.Model):
-    database_id = db.Column(db.Integer, primary_key=True)
-    point_id = db.Column(db.Integer)
+class TrackPoint(db.Model):
+    databaseId = db.Column(db.Integer, primary_key=True)
+    pointId = db.Column(db.Integer)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, index=True)
+    segmentId = db.Column(db.Integer, db.ForeignKey('track_segment.segment_id'))
