@@ -2,16 +2,17 @@ from app import db
 
 class Track(db.Model):
     database_id = db.Column(db.Integer, primary_key=True)
-    id = db.Column(db.Integer)
-    seg_id = db.Column(db.Integer)
+    track_id = db.Column(db.Integer)
+    segments = db.relationship('Segment', backref='track', lazy='dynamic')
     
 class Track_Segment(db.Model):
     database_id = db.Column(db.Integer, primary_key=True)
-
+    segment_id = db.Column(db.Integer)
+    points = db.relationship('Point', backref='segment', lazy='dynamic')
 
 class Track_Point(db.Model):
     database_id = db.Column(db.Integer, primary_key=True)
     point_id = db.Column(db.Integer)
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
-    time = db.Column(db.DateTime, index=True)
+    timestamp = db.Column(db.DateTime, index=True)
