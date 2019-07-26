@@ -1,8 +1,8 @@
-"""Track data models
+"""empty message
 
-Revision ID: 47108532d657
+Revision ID: 7274fc0f27d9
 Revises: 
-Create Date: 2019-07-26 00:32:35.858674
+Create Date: 2019-07-26 01:59:33.847734
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '47108532d657'
+revision = '7274fc0f27d9'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -38,7 +38,8 @@ def upgrade():
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('segment_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['segment_id'], ['track_segment.segment_id'], ),
-    sa.PrimaryKeyConstraint('database_id')
+    sa.PrimaryKeyConstraint('database_id'),
+    sa.UniqueConstraint('point_id', 'segment_id')
     )
     op.create_index(op.f('ix_track_point_timestamp'), 'track_point', ['timestamp'], unique=False)
     # ### end Alembic commands ###
