@@ -2,3 +2,4 @@
 __pycache__/
 /app/static/resources/database.db
 notes.txt
+notes.txt~
