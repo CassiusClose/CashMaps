@@ -3,7 +3,7 @@ from app import db
 #Be careful of ForeignKey case!
 class Track(db.Model):
     database_id = db.Column(db.Integer, primary_key=True)
-    track_id = db.Column(db.Integer)
+    track_id = db.Column(db.Integer, unique=True)
     points = db.relationship('TrackPoint', backref='track', lazy='dynamic')
 
 class TrackPoint(db.Model):

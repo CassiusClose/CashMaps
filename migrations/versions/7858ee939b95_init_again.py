@@ -1,9 +1,8 @@
-"""init
+"""init again
 
-
-Revision ID: a8d62e2b99b8
+Revision ID: 7858ee939b95
 Revises: 
-Create Date: 2019-07-26 03:27:43.183174
+Create Date: 2019-07-26 22:51:12.430881
 
 """
 from alembic import op
@@ -11,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'a8d62e2b99b8'
+revision = '7858ee939b95'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,7 +21,8 @@ def upgrade():
     op.create_table('track',
     sa.Column('database_id', sa.Integer(), nullable=False),
     sa.Column('track_id', sa.Integer(), nullable=True),
-    sa.PrimaryKeyConstraint('database_id')
+    sa.PrimaryKeyConstraint('database_id'),
+    sa.UniqueConstraint('track_id')
     )
     op.create_table('track_point',
     sa.Column('database_id', sa.Integer(), nullable=False),
