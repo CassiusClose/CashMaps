@@ -12,8 +12,8 @@ $.ajax({
     }
 });
 
+/*Processes JSON track data from the server and adds it to the Cesium widget*/
 function process_data(data) {
-    """Processes JSON track data from the server and adds it to the Cesium widget"""
 
     //For each track
     for(var track_key in data) {
