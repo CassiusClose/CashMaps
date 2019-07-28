@@ -1,8 +1,8 @@
-"""init again
+"""Revised slimmer track info
 
-Revision ID: 7858ee939b95
+Revision ID: b08659b95974
 Revises: 
-Create Date: 2019-07-26 22:51:12.430881
+Create Date: 2019-07-28 00:38:37.427141
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7858ee939b95'
+revision = 'b08659b95974'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -21,21 +21,18 @@ def upgrade():
     op.create_table('track',
     sa.Column('database_id', sa.Integer(), nullable=False),
     sa.Column('track_id', sa.Integer(), nullable=True),
-    sa.PrimaryKeyConstraint('database_id'),
-    sa.UniqueConstraint('track_id')
+    sa.PrimaryKeyConstraint('database_id')
     )
     op.create_table('track_point',
     sa.Column('database_id', sa.Integer(), nullable=False),
-    sa.Column('point_id', sa.Integer(), nullable=True),
     sa.Column('latitude', sa.Float(), nullable=True),
     sa.Column('longitude', sa.Float(), nullable=True),
     sa.Column('timestamp', sa.DateTime(), nullable=True),
     sa.Column('track_id', sa.Integer(), nullable=True),
-    sa.ForeignKeyConstraint(['track_id'], ['track.track_id'], ),
-    sa.PrimaryKeyConstraint('database_id'),
-    sa.UniqueConstraint('point_id', 'track_id')
+    sa.ForeignKeyConstraint(['track_id'], ['track.database_id'], ),
+    sa.PrimaryKeyConstraint('database_id')
     )
-    op.create_index(op.f('ix_track_point_timestamp'), 'track_point', ['timestamp'], unique=False)
+    op.create_index(op.f('ix_track_point_timestamp'), 'track_point', ['timestamp'], unique=True)
     # ### end Alembic commands ###
 
 

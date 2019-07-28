@@ -27,20 +27,25 @@ function process_data(data) {
                 if(track.hasOwnProperty(point_key)) {
 
                     //Processes data based on the key
-                    if(point_key == 'id') {}
-                    else if(point_key == 'point_count') {}
+                    if(point_key == 'point_count') {}
                     else {
                         var point = track[point_key];
                         var latitude = parseFloat(point['latitude']);
                         var longitude = parseFloat(point['longitude']);
-
-                        point_list.push(longitude);
-                        point_list.push(latitude);
+                        
+                        if(isNaN(latitude) || isNaN(longitude)) {
+                        }
+                        else {
+                            point_list.push(longitude);
+                            point_list.push(latitude);
+                        }
                     }
                 }
             }
 
-            //Ad the point list to the Cesium widget to create a line
+            console.log(point_list);
+
+            //Add the point list to the Cesium widget to create a line
             viewer.entities.add({
                 polyline: {
                     positions: Cesium.Cartesian3.fromDegreesArray(point_list),

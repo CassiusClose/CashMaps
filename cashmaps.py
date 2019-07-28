@@ -4,7 +4,7 @@ import logging
 import os
 
 #Set logging to info level and disables the prefix to each message
-logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"), format='%s(message)s')
+#logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"), format='%s(message)s')
 
 @app.shell_context_processor
 def make_shell_context():
