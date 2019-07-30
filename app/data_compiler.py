@@ -26,15 +26,22 @@ def get_track_data():
     """
 
     data = {}
+    print(len(Track.query.all()))
+    l = 0
     for track in Track.query.all():
-        track_data = {'id':track.track_id, 'point_count':len(track.points.all())}
+        if(len(track.points.all()) > 0):
+            print(str(l))
+            l += 1
+            track_data = {'id':track.track_id, 'point_count':len(track.points.all())}
 
-        i = 0
-        for point in track.points.all():
-            point_data = {'latitude':point.latitude,\
-                    'longitude':point.longitude, 'timestamp':point.timestamp}
-            track_data.update({str(i) : point_data})
-            i+=1
+            i = 0
+            for point in track.points.all():
+                point_data = {'latitude':point.latitude,\
+                        'longitude':point.longitude, 'timestamp':point.timestamp}
+                track_data.update({str(i) : point_data})
+                i+=1
 
-        data.update({str(track.track_id) : track_data})
+            data.update({str(track.database_id) : track_data})
+            print("Finished compiling track " + str(track.database_id))
+    print(len(Track.query.all()))
     return data

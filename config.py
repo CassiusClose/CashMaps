@@ -16,4 +16,3 @@ class Config(object):
 
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-

@@ -34,6 +34,7 @@ function process_data(data) {
                         var longitude = parseFloat(point['longitude']);
                         
                         if(isNaN(latitude) || isNaN(longitude)) {
+                            console.log(toString(latitude) + ", " + toString(longitude));
                         }
                         else {
                             point_list.push(longitude);
