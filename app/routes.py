@@ -29,13 +29,19 @@ def parser():
             global parser
             parser = Homeport_Parser(f)
             parser.start()
-        return redirect(url_for('parseProgress'))
+        return 'h'
 
     return render_template('parsers.html', form=form, progress=request.args.get('progress'))
+
 
 @app.route('/parseProgress')
 def parseProgress():
     return render_template('parseProgress.html')
+
+@app.route('/files')
+def files():
+    return render_template('files.html', basepath='/static/resources')
+
 
 
 

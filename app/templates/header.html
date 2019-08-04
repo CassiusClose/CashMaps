@@ -2,7 +2,15 @@
     <head>
         <title>Cash Maps</title>
 
-        <script src="/static/resources/scripts/jquery-1.9.0.js"></script>
+        <script src="/static/resources/scripts/res/jquery-1.9.0.js"></script>
+        <!--
+        <script src="/static/resources/scripts/res/react.min.js"></script>
+        <script src="/static/resources/scripts/res/react-dom.min.js"></script>
+        -->
+        <script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+        <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>       
+        <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
         <script src="/static/resources/scripts/functions.js"></script>
     </head>
     <body>
@@ -10,6 +18,7 @@
             <a href="{{url_for('index')}}">Home</a>
             <a href="{{url_for('map')}}">Map</a>
             <a href="{{url_for('parser')}}">Parser</a>
+            <a href="{{url_for('files')}}">Files</a>
         </div>
 
         <hr>
@@ -24,7 +33,6 @@
         {% endif %}
         {% endwith %}
 
-        <!--This must be here or nothing that extends this will show up-->
         {% block content %} {% endblock %}
     </body>
 <html>
