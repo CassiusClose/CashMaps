@@ -6,7 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack -p --progress --config webpack.config.js",
     "dev-build": "webpack --progress -d --config webpack.config.js",
-    "watch": "webpack --progress -d --config webpack.config.js"
+    "watch": "webpack --progress -d --config webpack.config.js --watch"
   },
   "author": "Cash Close",
   "license": "ISC",
@@ -15,6 +15,12 @@
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
+    "cesium": "^1.60.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "html-webpack-include-assets-plugin": "^2.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-tags-plugin": "^2.0.13",
+    "shebang-loader": "0.0.1",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6"
   },
@@ -22,6 +28,7 @@
     "history": "^4.9.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-router-dom": "^5.0.1"
+    "react-router-dom": "^5.0.1",
+    "resium": "^1.7.0"
   }
 }

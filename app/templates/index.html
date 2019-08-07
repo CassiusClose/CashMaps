@@ -2,7 +2,6 @@
     <head>
         <title>Cash Maps</title>
 
-        <script src="/static/resources/scripts/res/jquery-1.9.0.js"></script>
     </head>
     <body>
         {% with messages = get_flashed_messages() %}
@@ -16,9 +15,7 @@
         {% endwith %}
 
         {% block content %}
-        <div id="content">
-            <script src="/static/bundle.js"></script>
-        </div>
+        <div id="root"></div>
         {% endblock %}
     </body>
 <html>

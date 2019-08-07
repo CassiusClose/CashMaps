@@ -5,16 +5,10 @@ from app.models import Track, TrackPoint
 from app.forms import ParsingForm 
 from werkzeug import secure_filename
 
-@app.route('/')
-@app.route('/index')
-def index():
-    return render_template('header.html')
-
-@app.route('/map')
-def map():
-    """Routes the page with the Cesium map"""
-
-    return render_template('map.html')
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def index(path):
+    return render_template('index.html')
 
 @app.route('/parser', methods=['GET', 'POST'])
 def parser():
@@ -37,10 +31,6 @@ def parser():
 @app.route('/parseProgress')
 def parseProgress():
     return render_template('parseProgress.html')
-
-@app.route('/files')
-def files():
-    return render_template('files.html', basepath='/static/resources')
 
 
 
