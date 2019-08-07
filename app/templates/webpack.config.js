@@ -3,7 +3,7 @@ const resolve = require('path').resolve;
 const config = {
   entry: './src/index.jsx',
   module: {
-    rules [
+    rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -17,7 +17,7 @@ const config = {
   output: {
     path: resolve('../static'),
     publicPath: resolve('../static'),
-    fliename: 'bundle.js'
+    filename: 'bundle.js'
   }
 };
 

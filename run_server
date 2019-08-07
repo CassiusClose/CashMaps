@@ -1,0 +1,8 @@
+echo Setting Environment Variables
+export FLASK_APP=cashmaps.py
+export FLASK_DEBUG=1
+
+echo Starting webpack process
+echo Starting flask server
+
+parallel -j 2 -- 'npm run --prefix app/templates/ watch' 'flask run'
