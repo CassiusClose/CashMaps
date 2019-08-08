@@ -8,7 +8,7 @@ from werkzeug import secure_filename
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def index(path):
-    return render_template('index.html')
+    return render_template('dist/index.html')
 
 @app.route('/parser', methods=['GET', 'POST'])
 def parser():

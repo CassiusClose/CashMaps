@@ -36,7 +36,7 @@ module.exports = (env, argv) => {
           } 
       ]),
       new HtmlWebpackPlugin({
-        filepath: path.resolve(__dirname, 'dist/index.html'),
+        filepath: __dirname +  '/dist',
         template: 'index.html',
         scripts: ['cesium/Cesium.js']
       }),
@@ -50,6 +50,7 @@ module.exports = (env, argv) => {
     },
     output: {
       path: __dirname + '/dist',
+      publicPath: '',
       filename: 'bundle.js',
     },
   };
