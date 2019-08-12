@@ -4,7 +4,7 @@ const resolve = require('path').resolve;
 const Webpack = require('webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const HtmlWebpackTagsPlugin = require('html-webpack-tags-plugin');
 
 
 module.exports = (env, argv) => {
@@ -35,14 +35,19 @@ module.exports = (env, argv) => {
             to: "cesium"
           } 
       ]),
+      new CopyWebpackPlugin([
+        {
+          from: 'src/res/jquery-1.9.0.js',
+          to: 'res'
+        }
+      ]),
       new HtmlWebpackPlugin({
         filepath: __dirname +  '/dist',
         template: 'index.html',
-        scripts: ['cesium/Cesium.js']
       }),
-      new HtmlWebpackIncludeAssetsPlugin({
-        append: false,
-        assets: ["cesium/Widgets/widgets.css", "cesium/Cesium.js"]
+      new HtmlWebpackTagsPlugin({
+        tags: ['cesium/Widgets/widgets.css', 'cesium/Cesium.js', 'res/jquery-1.9.0.js'],
+        append: false
       })
     ],
     externals: {

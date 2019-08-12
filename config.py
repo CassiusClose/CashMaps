@@ -12,7 +12,14 @@ class Config(object):
     #determined at the beginning
     #Preferably, it could just be done from the static location
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-            'sqlite:////' + os.path.join(basedir + '/app/static/resources/database.db')
+            'sqlite:////' + os.path.join(basedir +  '/app/static/resources/database.db')
 
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+
+    TEMP_UPLOAD_FOLDER=os.path.join(basedir +  "/app/static/resources/temp/")
+
+    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+
+
+    TASK_TYPE_PARSE = "parse"

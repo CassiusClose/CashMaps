@@ -1,9 +1,17 @@
 import React from 'react';
 import history from '../history';
+import { Link } from 'react-router-dom';
 
 export default class Header extends React.Component {
   redirect(path) {
-    history.push(path);
+    console.log(path);
+    if(path == window.location.pathname) {
+      history.push('/'); 
+      history.push(path);
+    }
+    else {
+      history.push(path);
+    }
   }
 
   render() {
@@ -15,8 +23,8 @@ export default class Header extends React.Component {
           <button onClick={() => this.redirect('/parser')}>Parsers</button>
           <button onClick={() => this.redirect('/map')}>Map</button>
         </div>
-        <hr></hr>
+        <hr/>
       </div>
     );
   }
-}
+n}

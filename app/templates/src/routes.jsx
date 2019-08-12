@@ -5,7 +5,8 @@ import history from "./history";
 import IndexPage from "./pages/indexPage";
 import FilePage from "./pages/filePage";
 import Header from "./pages/header";
-import CesiumMap from "./pages/cesiumMap";
+import ParserPage from "./pages/parserPage";
+import MapPage from "./pages/mapPage";
 
 export default (
   <Router history={history}>
@@ -13,7 +14,8 @@ export default (
       <Header />
       <Route exact={true} path='/' component={IndexPage} />
       <Route path='/files' component={FilePage} />
-      <Route path='/map' component={CesiumMap} />
+      <Route path='/parser' component={ParserPage} />
+      <Route path='/map' component={MapPage} />
     </div>
   </Router>
 );

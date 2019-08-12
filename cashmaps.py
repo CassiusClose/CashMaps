@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Track, TrackPoint
+from app.models import Track, TrackPoint, Task, FlashMessage
 import logging
 import os
 
@@ -10,5 +10,5 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"), format='%(message)
 def make_shell_context():
     """Sets up automatic imports for the flask python shell to make testing easier"""
 
-    return {'db':db, 'Track':Track, 'TrackPoint':TrackPoint}
+    return {'db':db, 'Track':Track, 'TrackPoint':TrackPoint, 'Task':Task, 'FlashMessage':FlashMessage}
 
