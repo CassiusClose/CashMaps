@@ -1,8 +1,8 @@
-"""Added Flash Messages for redis background tasks
+"""Moved track and track point to map blueprint
 
-Revision ID: d33f54369a1f
+Revision ID: a2bc0f3ec32c
 Revises: 
-Create Date: 2019-08-12 15:19:36.661913
+Create Date: 2019-08-12 20:01:47.110053
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd33f54369a1f'
+revision = 'a2bc0f3ec32c'
 down_revision = None
 branch_labels = None
 depends_on = None

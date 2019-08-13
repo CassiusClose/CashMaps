@@ -3,7 +3,7 @@ import logging as log
 import os
 from flask import abort, flash
 from app import db
-from app.models import Track, TrackPoint
+from app.map.models import Track, TrackPoint
 from sqlalchemy import exc
 import datetime
 import threading

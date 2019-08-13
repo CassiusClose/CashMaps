@@ -22,6 +22,8 @@ queue = Queue('cashmaps', connection=redis)
 from app.parsing import parsing_bp
 app.register_blueprint(parsing_bp)
 
+from app.map import map_bp
+app.register_blueprint(map_bp)
 
 
 from app import routes, models

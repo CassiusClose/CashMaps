@@ -1,10 +1,5 @@
 from app import app, db, queue
 from flask import render_template, jsonify, flash, redirect, url_for, request
-from app.models import Track, TrackPoint, Task
-from app.forms import ParsingForm 
-from app.tasks import start_task
-from werkzeug import secure_filename
-import os
 
 #Can't stop static files from getting intercepted here as a catch-all,
 #so just use the manual approach..

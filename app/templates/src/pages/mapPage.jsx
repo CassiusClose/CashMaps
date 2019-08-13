@@ -4,6 +4,19 @@ import { Cartesian3 } from 'cesium';
 import Header from './header';
 
 export default class CesiumMap extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.test();
+  }
+
+  test = () => {
+    $.ajax({
+      url: "/map/_get_data",
+      type: "POST",
+    });
+  }
+
   render() {
     return(
       <div>

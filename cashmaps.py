@@ -1,5 +1,6 @@
 from app import app, db
-from app.models import Track, TrackPoint, Task, FlashMessage
+from app.models import Task, FlashMessage
+from app.map.models import Track, TrackPoint
 import logging
 import os
 
