@@ -5,7 +5,13 @@ import os
 
 def start_task(func, args, job_type, metadata={}):
     arg_list = [func, args, job_type, metadata]
-    job = queue.enqueue_call(func=go, args=arg_list)
+    job = queue.enqueue_call(func=go, args=arg_list, timeout=720)
+
+    #Metadata is applied here so it shows up while the task is waiting to start
+    for key in metadata:
+        job.meta[key] = metadata[key]
+    job.meta['callback'] = cleanup_task
+    job.save_meta()
 
     progress = Task(job_id=job.get_id(), job_type=job_type)
     db.session.add(progress)

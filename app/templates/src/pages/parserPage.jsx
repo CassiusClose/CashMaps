@@ -51,12 +51,12 @@ export default class ParserPage extends React.Component {
   }
 
   updateFlashedMessages = () => {
-    var successFunc = this.setFlashedMessages
+    var successFunc = this.setFlashedMessages;
     $.ajax({
       url: '/parser/_get_flashed_messages',
       type: 'POST',
       success: function(response) {
-        successFunc(response)
+        successFunc(response);
       }
     });
   }
@@ -85,13 +85,6 @@ export default class ParserPage extends React.Component {
   cancelTimer = () => {
     clearTimeout(this.timer);
   }
-
-  flash = (message) => {
-    messages = this.state.flashedMessages;
-    messages.push(message);
-    this.setState({flashedMessages:messages});
-  }
-
 
   render() {
     return(

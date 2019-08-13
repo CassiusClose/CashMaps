@@ -8,7 +8,7 @@ export default function FlashedMessages(props) {
         {
           props.flashedMessages != null &&
           props.flashedMessages.map((item) => (
-            <li key={item.timestamp}>{item.message}</li>
+            <li key={item.id}>{item.message}</li>
           ))
         }
       </ul>

@@ -14,7 +14,19 @@ class Track(db.Model):
     points = db.relationship('TrackPoint', backref='track', lazy='dynamic')
 
     def to_dict(self):
-        print(self.points)
+        points = self.points.order_by(TrackPoint.timestamp)
+        data = {'database_id':self.database_id, 'track_id':self.track_id, 'points':Track.results_to_arr(points)}
+        return data
+
+    def get_tracks():
+        tracks = Track.query.all()
+        return {'tracks': Track.results_to_arr(tracks)}
+
+    def results_to_arr(results):
+        arr = []
+        for obj in results:
+            arr.append(obj.to_dict())
+        return arr
 
 class TrackPoint(db.Model):
     """A database model that stores points on a map, lat long, that make up tracks"""
@@ -29,4 +41,4 @@ class TrackPoint(db.Model):
     track_id = db.Column(db.Integer, db.ForeignKey('track.database_id'))
 
     def to_dict(self):
-         return {'latitude':self.latitude, 'longitude':self.longitude, 'timestamp':timestamp, 'track_id':track_id}
+         return {'latitude':self.latitude, 'longitude':self.longitude, 'timestamp':self.timestamp, 'track_id':self.track_id}

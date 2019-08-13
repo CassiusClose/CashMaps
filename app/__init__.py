@@ -11,6 +11,11 @@ from redis import Redis
 app = Flask(__name__, template_folder='templates', static_folder='templates/dist/')
 app.config.from_object(Config)
 
+#TEMPORARY
+import logging
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
+
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
