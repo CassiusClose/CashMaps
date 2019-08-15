@@ -4,5 +4,5 @@ from flask import jsonify
 
 @map_bp.route('/map/_get_data', methods=['POST'])
 def map_get_data():
-    """Passes track data along to the Cesium widget to be displayed"""
+    """Returns track data for the Cesium widget to display"""
     return Track.get_tracks()

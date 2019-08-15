@@ -8,6 +8,8 @@ import Header from "./pages/header";
 import ParserPage from "./pages/parserPage";
 import MapPage from "./pages/mapPage";
 
+/*Uses the react-router plugin to route to different pages depending on the current URL.*/
+
 export default (
   <Router history={history}>
     <div>

@@ -2,16 +2,13 @@ import React from 'react';
 import history from '../history';
 import { Link } from 'react-router-dom';
 
+/**
+ * This class is the header above all the content on the webpage that links to different
+ * parts of the website. routes.jsx will display this on every page.
+ */
 export default class Header extends React.Component {
   redirect(path) {
-    console.log(path);
-    if(path == window.location.pathname) {
-      history.push('/'); 
-      history.push(path);
-    }
-    else {
-      history.push(path);
-    }
+    history.push(path);
   }
 
   render() {

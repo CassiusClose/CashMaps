@@ -8,10 +8,12 @@ import os
 
 @parsing_bp.route('/parser/_start_parse', methods=['POST'])
 def parser_start_parse():
+    """Begins a parse with the request's attached files."""
     files = request.files
-    ids = {} 
     for i in range(0, len(files)):
 
+        #Store each file in a temp directory, where they can be read from.
+        #Must delete these files manually, done in app/tasks.py/cleanup_parse()
         f = files.get(str(i))
         filepath = os.path.join(app.config['TEMP_UPLOAD_FOLDER'], f.filename)
         f.save(filepath)
@@ -23,8 +25,10 @@ def parser_start_parse():
 
 @parsing_bp.route('/parser/_get_progress', methods=['POST'])
 def parser_get_progress(): 
+    """Returns info about all active parser tasks"""
     return Task.get_tasks_by_type(app.config['TASK_TYPE_PARSE'])
 
 @parsing_bp.route('/parser/_get_flashed_messages', methods=['POST'])
 def parser_get_flashed_messages():
+    """Returns all SQL flashed messages related to parsing
     return FlashMessage.get_messages_by_type(app.config['TASK_TYPE_PARSE'])

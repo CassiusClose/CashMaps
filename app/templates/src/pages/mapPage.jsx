@@ -3,6 +3,9 @@ import { Viewer, Entity, PointGraphics, EntityDescription, Polyline, PolylineCol
 import { Cartesian3 } from 'cesium';
 import Header from './header';
 
+/**
+ * Displays a cesium widget and displays track data on it from the server.
+ */
 export default class CesiumMap extends React.Component {
   constructor(props) {
     super(props);
@@ -12,6 +15,7 @@ export default class CesiumMap extends React.Component {
     this.get_track_data();
   }
 
+  /* Gets track data from the server and passes it to set_track_data(). */
   get_track_data = () => {
     var successFunc = this.set_track_data;
     $.ajax({
@@ -23,8 +27,9 @@ export default class CesiumMap extends React.Component {
     });
   }
 
+  /* Loads track data into this components state. Formats the points into Cartesian3 form. */
   set_track_data = (data) => {
-    //Replace point dicts with CartesianCoords
+    //Replace the dicts of point objects with arrays of Cartesian3 objects so Cesium can read them
     for(var track of data) {
       var points = [];
       for(const point of track.points) {

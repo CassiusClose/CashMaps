@@ -11,15 +11,19 @@ from redis import Redis
 app = Flask(__name__, template_folder='templates', static_folder='templates/dist/')
 app.config.from_object(Config)
 
-#TEMPORARY
+
+#TEMPORARY, hides standard GET and POST requests to declutter the term for finding errors
 import logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 
+#Databasing and migration of changes
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
+
+#For scheduling background tasks
 redis = Redis.from_url(app.config['REDIS_URL'])
 queue = Queue('cashmaps', connection=redis)
 

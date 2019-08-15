@@ -2,17 +2,15 @@ venv/
 
 *.pyc
 __pycache__/
-
-instance/
-
-.pytest_cache
+instance/ .pytest_cache
 .coverage
 htmlcov/
 
 *.db
 
-notes.txt
-notes.txt~
+notes.todo
+notes.todo~
+changelog/
 
 dist/
 build/
