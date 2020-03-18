@@ -7,6 +7,8 @@ import FilePage from "./pages/filePage";
 import Header from "./pages/header";
 import ParserPage from "./pages/parserPage";
 import MapPage from "./pages/mapPage";
+import UploadPage from "./pages/uploadPage";
+import PhotosPage from "./pages/photosPage";
 
 /*Uses the react-router plugin to route to different pages depending on the current URL.*/
 
@@ -18,6 +20,8 @@ export default (
       <Route path='/files' component={FilePage} />
       <Route path='/parser' component={ParserPage} />
       <Route path='/map' component={MapPage} />
+      <Route path='/upload' component={UploadPage} />
+      <Route path='/gallery' component={PhotosPage} />
     </div>
   </Router>
 );

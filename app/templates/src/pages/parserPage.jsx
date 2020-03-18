@@ -2,6 +2,7 @@ import React from 'react';
 import FileChooser from './../components/fileChooser';
 import ProgressBar from './../components/progressBar';
 import FlashedMessages from './../components/flashedMessagesList';
+import './parserPage.css';
 
 /**
  * Provides the user with a way to parse track file data and displays info on active parsing jobs.
@@ -10,10 +11,11 @@ export default class ParserPage extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      files:null,           //Files selected by the <input> tag
+    this.state = { files:null,           //Files selected by the <input> tag
       activeParsers:[],     //Active parse jobs, JSON dictionaries read into <progress> tags
-      flashedMessages:[]    //Any messages from the server, displayed on the page
+      flashedMessages:[],    //Any messages from the server, displayed on the page
+      uploaderDescription: "Choose text files exported from Garmin Homeport.",
+      uploaderTitle: "Upload Track Data",
     };
     this.timer = setInterval(this.updateInfo, 1000); //Repeatedly poll for status updates
 
@@ -79,11 +81,7 @@ export default class ParserPage extends React.Component {
     if(data) {
       //Get copy of existing list and add to it. Then resubmit it to the state so that
       //existing flashed messages aren't removed until the page unloads
-      var messages = this.state.flashedMessages;
-      for(var key in data) {
-        messages.push(data[key]) 
-      }
-
+      var messages = this.state.flashedMessages.concat(data);
       this.setState({flashedMessages:messages})
     }
   }
@@ -91,10 +89,7 @@ export default class ParserPage extends React.Component {
   /** Updates the state's list of active parsers. */
   setProgress = (data) => {
     if(data) {
-      var list = [];
-      for(var key in data) {
-        list.push(data[key]);
-      }
+      var list = [].concat(data);
       this.setState({activeParsers:list});
     }
   }
@@ -106,23 +101,29 @@ export default class ParserPage extends React.Component {
 
   render() {
     return(
-      <div>
-        <FileChooser
-          onSubmit={(files) => this.onFileSubmit(files)}
-        />      
-        <hr/>
-        <h2>Active Parse Tasks</h2>
-        { this.state.activeParsers != null &&
-          this.state.activeParsers.map((item) => (
-            <ProgressBar
-              key={item.job_id}
-              progress={item.progress}
-              max={item.max_progress}
-              message={item.filename}
-            />
-          ))
-        }
-        <hr/>
+      <div className="ParserPage_Container">
+        <div className="ParserPage_Row1">
+          <FileChooser
+            className="ParserPage_Uploader"
+            onSubmit={(files) => this.onFileSubmit(files)}
+            title={this.state.uploaderTitle}
+            description={this.state.uploaderDescription}
+          />      
+
+          <div className="ParserPage_Progress">
+            <h2>Active Parse Tasks</h2>
+            { this.state.activeParsers != null &&
+              this.state.activeParsers.map((item) => (
+                <ProgressBar
+                  key={item.job_id}
+                  progress={item.progress} max={item.max_progress}
+                  message={item.filename}
+                />
+              ))
+            }
+          </div>
+        </div>
+
         <FlashedMessages flashedMessages={this.state.flashedMessages}/>
       </div>
     );

@@ -1,0 +1,9 @@
+.ProgressBar_Progress {
+    float: left;
+    margin: 0 3px;
+}
+
+.ProgressBar_Message {
+    float: left;
+    margin: 0 3px;
+}

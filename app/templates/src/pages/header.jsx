@@ -1,6 +1,7 @@
 import React from 'react';
 import history from '../history';
 import { Link } from 'react-router-dom';
+import './header.css';
 
 /**
  * This class is the header above all the content on the webpage that links to different
@@ -13,12 +14,14 @@ export default class Header extends React.Component {
 
   render() {
     return(
-      <div>
-        <div>
+      <div className="Header_Container">
+        <div className="Header_Links">
           <button onClick={() => this.redirect('/')}>Home</button>
           <button onClick={() => this.redirect('/files')}>Files</button>
           <button onClick={() => this.redirect('/parser')}>Parsers</button>
           <button onClick={() => this.redirect('/map')}>Map</button>
+          <button onClick={() => this.redirect('/upload')}>Upload</button>
+          <button onClick={() => this.redirect('/gallery')}>Gallery</button>
         </div>
         <hr/>
       </div>

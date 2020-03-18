@@ -17,9 +17,13 @@ class Config(object):
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    TEMP_UPLOAD_FOLDER=os.path.join(basedir +  "/app/static/resources/temp/")
-
     REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
 
+    UPLOAD_FOLDER_TEMP=os.path.join(basedir +  "/app/static/resources/temp/")
+    UPLOAD_FOLDER_PHOTOS=os.path.join(basedir + "/app/static/photos/")
+
+
+
     TASK_TYPE_PARSE = "parse"
+    FLASH_TYPE_UPLOAD = "upload_flash"

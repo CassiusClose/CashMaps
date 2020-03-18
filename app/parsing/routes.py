@@ -15,7 +15,7 @@ def parser_start_parse():
         #Store each file in a temp directory, where they can be read from.
         #Must delete these files manually, done in app/tasks.py/cleanup_parse()
         f = files.get(str(i))
-        filepath = os.path.join(app.config['TEMP_UPLOAD_FOLDER'], f.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER_TEMP'], f.filename)
         f.save(filepath)
 
         job_id = start_task(func=parse_homeport, args=(filepath,), job_type=app.config['TASK_TYPE_PARSE'], metadata={'filename':f.filename, 'filepath':filepath}) 
@@ -30,5 +30,5 @@ def parser_get_progress():
 
 @parsing_bp.route('/parser/_get_flashed_messages', methods=['POST'])
 def parser_get_flashed_messages():
-    """Returns all SQL flashed messages related to parsing
+    """Returns all SQL flashed messages related to parsing."""
     return FlashMessage.get_messages_by_type(app.config['TASK_TYPE_PARSE'])

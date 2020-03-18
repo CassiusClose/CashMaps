@@ -18,7 +18,7 @@ class Track(db.Model):
     def to_dict(self):
         """Returns a dictionary representation of this object to be used as JSON."""
         points = self.points.order_by(TrackPoint.timestamp)
-        data = {'database_id':self.database_id, 'track_id':self.track_id, 'points':Track.results_to_arr(points)}
+        data = {'database_id':self.database_id, 'track_id':self.track_id, 'points':results_to_arr(points)}
         return data
 
     def get_tracks():

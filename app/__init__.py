@@ -8,7 +8,7 @@ from redis import Redis
 
 #templates: templates, static: template/dist/
 
-app = Flask(__name__, template_folder='templates', static_folder='templates/dist/')
+app = Flask(__name__, template_folder='', static_folder='static/')
 app.config.from_object(Config)
 
 
@@ -33,6 +33,9 @@ app.register_blueprint(parsing_bp)
 
 from app.map import map_bp
 app.register_blueprint(map_bp)
+
+from app.uploader import uploader_bp
+app.register_blueprint(uploader_bp)
 
 
 from app import routes, models
