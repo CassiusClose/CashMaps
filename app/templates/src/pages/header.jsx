@@ -17,7 +17,6 @@ export default class Header extends React.Component {
       <div className="Header_Container">
         <div className="Header_Links">
           <button onClick={() => this.redirect('/')}>Home</button>
-          <button onClick={() => this.redirect('/files')}>Files</button>
           <button onClick={() => this.redirect('/parser')}>Parsers</button>
           <button onClick={() => this.redirect('/map')}>Map</button>
           <button onClick={() => this.redirect('/upload')}>Upload</button>
@@ -27,4 +26,6 @@ export default class Header extends React.Component {
       </div>
     );
   }
-n}
+}
+//Hidden links
+          <button onClick={() => this.redirect('/files')}>Files</button>
