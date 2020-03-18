@@ -1,5 +1,6 @@
 import React from 'react';
 import { Viewer, Entity, PointGraphics, EntityDescription, Polyline, PolylineCollection, LabelGraphics } from 'resium';
+import LoadingTextAnim from './../components/loading_text_anim';
 import { Cartesian3 } from 'cesium';
 import Header from './header';
 
@@ -57,9 +58,7 @@ export default class CesiumMap extends React.Component {
     return(
       <div>
         { this.state.loading &&
-          <h1>
-            Loading...
-          </h1>
+            <LoadingTextAnim/>
         }
         { !this.state.loading &&
           <Viewer>
