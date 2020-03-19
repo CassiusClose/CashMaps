@@ -78,7 +78,7 @@ class FlashMessage(db.Model):
     """Represents a flashed message as an alternative to flask's flash messaging system."""
 
     #SQLAlchemy-assigned id
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
 
     #Currently also uses Task Type constants from app.config
     message_type = db.Column(db.String(64), index=True)
@@ -100,6 +100,8 @@ class FlashMessage(db.Model):
         """Returns all messages in the database and removes them from the database."""
         messages = FlashMessage.query.order_by(FlashMessage.timestamp.desc())
         arr = results_to_arr(messages)
+        for i in range(0, length(arr)):
+            print(arr[i]);
 
         FlashMessage.query.delete()
         db.session.commit()

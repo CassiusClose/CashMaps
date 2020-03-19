@@ -10,6 +10,7 @@ from flask import render_template, jsonify, flash, redirect, url_for, request
 @app.route('/map')
 @app.route('/upload')
 @app.route('/gallery')
+@app.route('/tools')
 def catch_all():
     return render_template('static/index.html')
 

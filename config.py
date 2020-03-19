@@ -26,4 +26,5 @@ class Config(object):
 
 
     TASK_TYPE_PARSE = "parse"
+    TASK_TYPE_MAP = "map"
     FLASH_TYPE_UPLOAD = "upload_flash"

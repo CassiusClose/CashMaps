@@ -124,7 +124,7 @@ export default class ParserPage extends React.Component {
           </div>
         </div>
 
-        <FlashedMessages flashedMessages={this.state.flashedMessages}/>
+        <FlashedMessages url="/parser/_get_flashed_messages"/>
       </div>
     );
   }

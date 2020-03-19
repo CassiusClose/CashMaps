@@ -26,6 +26,11 @@ class Track(db.Model):
         tracks = Track.query.all()
         return {'tracks': results_to_arr(tracks)}
 
+    def clear_tracks():
+        Track.query.delete()
+        TrackPoint.query.delete()
+        db.session.commit()
+
 class TrackPoint(db.Model):
     """A database model that stores points on a map, in lat & long, that form tracks"""
 

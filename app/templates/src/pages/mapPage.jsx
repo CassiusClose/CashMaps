@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Viewer, Entity, PointGraphics, EntityDescription, Polyline, PolylineCollection, LabelGraphics } from 'resium';
 import LoadingTextAnim from './../components/loading_text_anim';
 import { Cartesian3 } from 'cesium';
@@ -10,23 +10,19 @@ Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOi
 /**
  * Displays a cesium widget and displays track data on it from the server.
  */
-export default class CesiumMap extends React.Component {
-  constructor(props) {
-    super(props);
+export default function CesiumMap(props) {
+  const [tracks, setTracks] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-    this.state = {tracks:null, loading:true};
 
-    this.load_map();
-  }
-
-  load_map = () => {
-    this.get_track_data();
-  }
+  useEffect(() => {
+    fetch_track_data();
+  }, []);
 
   /* Gets track data from the server and passes it to set_track_data(). */
-  get_track_data = () => {
+  const fetch_track_data = () => {
     console.log("Fetching map data...");
-    var successFunc = this.set_track_data;
+    var successFunc = set_track_data;
     $.ajax({
       url: "/map/_get_data",
       type: "POST",
@@ -37,7 +33,7 @@ export default class CesiumMap extends React.Component {
   }
 
   /* Loads track data into this components state. Formats the points into Cartesian3 form. */
-  set_track_data = (data) => {
+  const set_track_data = (data) => {
     console.log("Loading map data...");
     //Replace the dicts of point objects with arrays of Cartesian3 objects so Cesium can read them
     for(var track of data) {
@@ -48,36 +44,34 @@ export default class CesiumMap extends React.Component {
       track.points = points;
     }
 
-    this.setState({tracks: data, loading: false});
+    setTracks(data);
+    setIsLoading(false);
+
     console.log("Done loading map data");
   }
 
-
-
-  render() {
-    return(
-      <div>
-        { this.state.loading &&
-            <LoadingTextAnim/>
-        }
-        { !this.state.loading &&
-          <Viewer>
-            <Entity>
-              <PolylineCollection>
-                {
-                  this.state.tracks != null &&
-                  this.state.tracks.map((track) => (
-                    <Polyline
-                      key={track.database_id}
-                      positions={track.points}
-                    />
-                  ))
-                }
-              </PolylineCollection>
-            </Entity>
-          </Viewer>
-        }
-      </div>
-    );
-  }
+  return(
+    <div>
+      { isLoading &&
+          <LoadingTextAnim/>
+      }
+      { !isLoading &&
+        <Viewer>
+          <Entity>
+            <PolylineCollection>
+              {
+                tracks != null &&
+                tracks.map((track) => (
+                  <Polyline
+                    key={track.database_id}
+                    positions={track.points}
+                  />
+                ))
+              }
+            </PolylineCollection>
+          </Entity>
+        </Viewer>
+      }
+    </div>
+  );
 }
