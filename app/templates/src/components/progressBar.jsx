@@ -1,12 +1,7 @@
 import React from 'react';
 import "./progressBar.css";
 
-export default class ProgressBar extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
+export default function ProgressBar(props) {
     return(
       <div className="ProgressBar_Div">
         <progress
@@ -19,5 +14,4 @@ export default class ProgressBar extends React.Component {
         </div>
       </div>
     );
-  }
 }

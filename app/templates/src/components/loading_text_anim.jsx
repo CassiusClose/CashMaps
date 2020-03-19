@@ -1,49 +1,32 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
-export default class LoadingTextAnim extends React.Component {
-  constructor(props) {
-    super(props);
+export default function LoadingTextAnim(props) {
+  const MAX_PERIODS = 3;
+  const BASE_TEXT = "Loading";
 
-    this.state = {text: "Loading.", num_periods: 1, anim_delay: props.speed, timer_id: null};
+  const [numPeriods, setNumPeriods] = useState(1);
+  const [text, setText] = useState(BASE_TEXT);
 
-  }
+  useEffect(() => {
+    var scheduler = setTimeout(() => {
+      setNumPeriods(((numPeriods) % MAX_PERIODS) + 1);
+      var new_text = BASE_TEXT;
+      for(var i = 0; i < numPeriods; i++) {
+        new_text += ".";
+      }
+      setText(new_text);
+    }, props.speed);
 
-  componentDidMount() {
-    var self = this;
-    var id = setInterval(function () {
-      self.updateLoadingText();
-    }, this.state.anim_delay);
-    this.setState({timer_id: id});
-  }
-
-  updateLoadingText() {
-    var periods = this.state.num_periods;
-    periods += 1;
-    if(periods > 3) {
-      periods = 1;
+    return () => {
+      clearTimeout(scheduler); 
     }
-  
-    var text = "Loading";
-    for(var i = 0; i < periods; i++) {
-      text += ".";
-    }
+  });
 
-    this.setState({text: text, num_periods: periods});
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.timer_id);
-  }
-
-  render() {
-    return(
-      <div>
-        <h1>
-          {this.state.text}
-        </h1>
-      </div>
-    );
-  }
+  return(
+    <h1>
+      {text}
+    </h1>
+  );
 }
 
 LoadingTextAnim.defaultProps = {speed: 500};
