@@ -6,11 +6,11 @@ export default function ProgressBar(props) {
       <div className="ProgressBar_Div">
         <progress
           className="ProgressBar_Progress"
-          value={this.props.progress}
-          max={this.props.max}
+          value={props.progress}
+          max={props.max}
         />
         <div className="ProgressBar_Message">
-          {this.props.message != null && this.props.message}
+          {props.message != null && props.message}
         </div>
       </div>
     );
