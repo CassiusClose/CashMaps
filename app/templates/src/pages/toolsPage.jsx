@@ -6,7 +6,17 @@ export default function ToolsPage(props) {
       url: "/map/_clear_data",
       type: "POST",
       success: function(response) {
-        console.log("Cleared"); 
+        console.log("Cleared tracks"); 
+      }
+    });
+  }
+
+  const clearParseTasks = () => {
+    $.ajax({
+      url: "/parser/_clear_nonactive_tasks",
+      type: "POST",
+      success: function(response) {
+        console.log("Cleared parse tasks");
       }
     });
   }
@@ -17,3 +27,4 @@ export default function ToolsPage(props) {
     </div>
   );
 }
+      //<button onClick={clearParseTasks}>Clear Nonactive Parse Tasks</button>

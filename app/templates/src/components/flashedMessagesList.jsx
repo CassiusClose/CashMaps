@@ -10,7 +10,6 @@ export default function FlashedMessages(props) {
           url: '/parser/_get_flashed_messages',
           type: 'POST',
           success: function(response) {
-            console.log(response.messages);
             if(!messages) {
               setMessages(response.messages);
             }

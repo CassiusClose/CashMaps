@@ -21,6 +21,13 @@ class Task(db.Model):
     #job_type has constants set up in app.config
     job_type = db.Column(db.String(64), index=True)
 
+    def cancel_if_nonactive(self):
+        job = self.get_rq_job()
+        if not job.is_started:
+            self.get_rq_job().cancel()
+            db.session.delete(self)
+            db.session.commit()
+
     def to_dict(self):
         """Returns a dictionary representation of the object to be used as JSON."""
         data = {'job_id':self.job_id, 'job_type':self.job_type}
@@ -71,6 +78,12 @@ class Task(db.Model):
         tasks = Task.query.filter_by(job_type=type)
         return {"tasks": results_to_arr(tasks)}
     
+    def cancel_nonactive_tasks():
+        tasks = Task.query.all()
+        for task in tasks:
+            task.cancel_if_nonactive()
+
+
 
 
 
