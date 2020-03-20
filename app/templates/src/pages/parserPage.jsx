@@ -49,7 +49,7 @@ export default class ParserPage extends React.Component {
   /** Poll for updates on active parse jobs and new flashed messages. */
   updateInfo = () => {
     this.updateProgress();
-    this.updateFlashedMessages();
+    //this.updateFlashedMessages();
   }
 
   /** Get active parse job info from the server and pass it to setProgress(). */

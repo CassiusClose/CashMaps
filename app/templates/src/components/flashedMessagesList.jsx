@@ -33,7 +33,7 @@ export default function FlashedMessages(props) {
         {
           messages != null &&
           messages.map((item) => (
-            <li key={item.id}>{item.message}</li>
+            <li key={item.timestamp}>{item.message}</li>
           ))
         }
       </ul>
