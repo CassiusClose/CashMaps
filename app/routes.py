@@ -1,4 +1,5 @@
 from app import app, db, queue
+from app.models import Task
 from flask import render_template, jsonify, flash, redirect, url_for, request 
 
 #For this to work as a catchall, I couldn't stop it from also intercepting
@@ -13,6 +14,13 @@ from flask import render_template, jsonify, flash, redirect, url_for, request
 @app.route('/tools')
 def catch_all():
     return render_template('static/index.html')
+
+@app.route('/_clear_rq', methods=['POST'])
+def clear_rq():
+    queue.empty()
+    Task.query.delete()
+    db.session.commit()
+    return {}
 
 @app.route('/_upload_photo', methods=['POST'])
 def upload_photo():

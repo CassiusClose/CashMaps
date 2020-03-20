@@ -11,12 +11,12 @@ export default function ToolsPage(props) {
     });
   }
 
-  const clearParseTasks = () => {
+  const clearRQ = () => {
     $.ajax({
-      url: "/parser/_clear_nonactive_tasks",
+      url: "/_clear_rq",
       type: "POST",
       success: function(response) {
-        console.log("Cleared parse tasks");
+        console.log("Cleared Redis Queue");
       }
     });
   }
@@ -24,7 +24,7 @@ export default function ToolsPage(props) {
   return(
     <div>
       <button onClick={removeTracks}>Remove Tracks</button>
+      <button onClick={clearRQ}>Clear Redis Queue</button>
     </div>
   );
 }
-      //<button onClick={clearParseTasks}>Clear Nonactive Parse Tasks</button>

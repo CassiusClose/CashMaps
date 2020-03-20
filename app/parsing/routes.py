@@ -22,12 +22,6 @@ def parser_start_parse():
 
     return {}
 
-@parsing_bp.route('/parser/_clear_nonactive_tasks', methods=['POST'])
-def parser_clear_tasks():
-    Task.cancel_nonactive_tasks()
-    return {}
-
-
 @parsing_bp.route('/parser/_get_progress', methods=['POST'])
 def parser_get_progress(): 
     """Returns info about all active parser tasks"""
