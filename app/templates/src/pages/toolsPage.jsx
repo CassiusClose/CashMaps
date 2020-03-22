@@ -24,7 +24,7 @@ export default function ToolsPage(props) {
   return(
     <div>
       <button onClick={removeTracks}>Remove Tracks</button>
-      <button onClick={clearRQ}>Clear Redis Queue</button>
+      <button onClick={clearRQ}>Clear Parse Tasks</button>
     </div>
   );
 }

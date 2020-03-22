@@ -1,37 +1,42 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import FileChooser from './../components/fileChooser';
 import ProgressBar from './../components/progressBar';
 import FlashedMessages from './../components/flashedMessagesList';
 import './parserPage.css';
 
-/**
- * Provides the user with a way to parse track file data and displays info on active parsing jobs.
- */
-export default class ParserPage extends React.Component {
-  constructor(props) {
-    super(props);
+export default function parserPage(props) {
+  const [files, setFiles] = useState([]);
+  const [activeParsers, setActiveParsers] = useState([]);
 
-    this.state = { files:null,           //Files selected by the <input> tag
-      activeParsers:[],     //Active parse jobs, JSON dictionaries read into <progress> tags
-      flashedMessages:[],    //Any messages from the server, displayed on the page
-      uploaderDescription: "Choose text files exported from Garmin Homeport.",
-      uploaderTitle: "Upload Track Data",
+  const UPLOADER_DESC = "Choose text files exported from Garmin Homeport.";
+  const UPLOADER_TITLE = "Upload Track Data";
+
+  const FETCH_PARSER_INFO_DELAY = 500;
+
+  useEffect(() => {
+    var scheduler = setTimeout(() => {
+      $.ajax({
+        url: '/parser/_get_progress',
+        type: 'POST',
+        success: function(response) {
+          if(response.tasks) {
+            setActiveParsers([...response.tasks]);
+          }
+        }
+      });
+    }, FETCH_PARSER_INFO_DELAY);
+
+    return () => {
+      clearTimeout(scheduler);
     };
-    this.timer = setInterval(this.updateInfo, 1000); //Repeatedly poll for status updates
+  })
 
-    this.updateInfo() //Poll for updates now, don't wait for the timer to finish its first delay
+  const onFileSubmit = (files) => {
+    setFiles(files);
+    startParse(files);
   }
 
-  /** Handles a submit of the file input form, uploading the files to the server to parse and
-   * polling for status updates. */
-  onFileSubmit = (files) => {
-    this.setState({files:files}); 
-    this.startParse(files);
-    this.updateInfo()
-  }
-
-  /** Uploads the files to the server to be parsed. */
-  startParse = (files) => {
+  const startParse = (files) => {
     const data = new FormData(); //Form data is the only way to upload files to flask
     for(var i = 0; i < files.length; i++) {
       data.append(i, files[i]);
@@ -46,91 +51,31 @@ export default class ParserPage extends React.Component {
     });
   }
 
-  /** Poll for updates on active parse jobs and new flashed messages. */
-  updateInfo = () => {
-    this.updateProgress();
-    //this.updateFlashedMessages();
-  }
+  return(
+    <div className="ParserPage_Container">
+      <div className="ParserPage_Row1">
+        <FileChooser
+          className="ParserPage_Uploader"
+          onSubmit={(files) => onFileSubmit(files)}
+          title={UPLOADER_TITLE}
+          description={UPLOADER_DESC}
+        />      
 
-  /** Get active parse job info from the server and pass it to setProgress(). */
-  updateProgress = () => {
-    var successFunc = this.setProgress;
-    $.ajax({
-      url: '/parser/_get_progress',
-      type: 'POST',
-      success: function(response) {
-        successFunc(response.tasks);
-      }
-    });
-  }
-
-  /** Get new flashed messages from the server and pass them to setFlashedMessages(). */
-  updateFlashedMessages = () => {
-    var successFunc = this.setFlashedMessages;
-    $.ajax({
-      url: '/parser/_get_flashed_messages',
-      type: 'POST',
-      success: function(response) {
-        successFunc(response.messages);
-      }
-    });
-  }
-
-  /** Adds new flashed messages to the existing array of messages. */
-  setFlashedMessages = (data) => {
-    if(data) {
-      //Get copy of existing list and add to it. Then resubmit it to the state so that
-      //existing flashed messages aren't removed until the page unloads
-      var messages = this.state.flashedMessages.concat(data);
-      this.setState({flashedMessages:messages})
-    }
-  }
-
-  /** Updates the state's list of active parsers. */
-  setProgress = (data) => {
-    if(data) {
-      var list = [].concat(data);
-      this.setState({activeParsers:list});
-    }
-  }
-
-  /** Cancels the timer that gets status updates. Should be called when unloading the page. */
-  cancelTimer = () => {
-    clearTimeout(this.timer);
-  }
-
-  render() {
-    return(
-      <div className="ParserPage_Container">
-        <div className="ParserPage_Row1">
-          <FileChooser
-            className="ParserPage_Uploader"
-            onSubmit={(files) => this.onFileSubmit(files)}
-            title={this.state.uploaderTitle}
-            description={this.state.uploaderDescription}
-          />      
-
-          <div className="ParserPage_Progress">
-            <h2>Active Parse Tasks</h2>
-            { this.state.activeParsers != null &&
-              this.state.activeParsers.map((item) => (
-                <ProgressBar
-                  key={item.job_id}
-                  progress={item.progress} max={item.max_progress}
-                  message={item.filename}
-                />
-              ))
-            }
-          </div>
+        <div className="ParserPage_Progress">
+          <h2>Active Parse Tasks</h2>
+          { activeParsers != null &&
+            activeParsers.map((item) => (
+              <ProgressBar
+                key={item.job_id}
+                progress={item.progress} max={item.max_progress}
+                message={item.filename}
+              />
+            ))
+          }
         </div>
-
-        <FlashedMessages url="/parser/_get_flashed_messages"/>
       </div>
-    );
-  }
 
-  /** Cleans up after the component when it's being unmounted. */
-  componentWillUnmount() {
-    this.cancelTimer(); //Cancels the status update timer
-  }
-} 
+      <FlashedMessages url="/parser/_get_flashed_messages"/>
+    </div>
+  );
+}
