@@ -23,3 +23,5 @@ temp/
 app/static/photos
 
 Production
+
+*.swp
