@@ -1,6 +1,7 @@
 import os
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+os.environ['PYTHONUNBUFFERED'] = "TRUE"
 
 class Config(object):
     #For encryption or something
@@ -11,9 +12,11 @@ class Config(object):
     #Using absolute was how I got it to work, but that's okay because basedir is
     #determined at the beginning
     #Preferably, it could just be done from the static location
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-            'sqlite:////' + os.path.join(basedir +  '/app/static/resources/database.db')
+    #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
+            #'sqlite:////' + os.path.join(basedir +  '/app/static/resources/database.db')
 
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + basedir + '/app/static/resources/database.db'
+    print(SQLALCHEMY_DATABASE_URI)
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

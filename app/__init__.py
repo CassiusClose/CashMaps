@@ -10,12 +10,13 @@ from redis import Redis
 
 app = Flask(__name__, template_folder='', static_folder='static/')
 app.config.from_object(Config)
+app.debug = True
 
 
 #TEMPORARY, hides standard GET and POST requests to declutter the term for finding errors
 import logging
 log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+log.setLevel(logging.INFO)
 
 
 #Databasing and migration of changes
