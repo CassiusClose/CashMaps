@@ -7,6 +7,7 @@ import './parserPage.css';
 export default function parserPage(props) {
   const [files, setFiles] = useState([]);
   const [activeParsers, setActiveParsers] = useState([]);
+  const [counter, setCounter] = useState(1);
 
   const UPLOADER_DESC = "Choose text files exported from Garmin Homeport.";
   const UPLOADER_TITLE = "Upload Track Data";
@@ -14,13 +15,16 @@ export default function parserPage(props) {
   const FETCH_PARSER_INFO_DELAY = 500;
 
   useEffect(() => {
+    console.log('fetching...');
     var scheduler = setTimeout(() => {
       $.ajax({
         url: '/parser/_get_progress',
         type: 'POST',
         success: function(response) {
+          console.log("receieved");
           if(response.tasks) {
             setActiveParsers([...response.tasks]);
+            setCounter((counter+1)%100);
           }
         }
       });

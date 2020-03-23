@@ -34,7 +34,7 @@
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.1",
     "resium": "^1.7.0",
-    "save-dev": "^2.0.0",
+    "save-dev": "0.0.1-security",
     "style-loader": "^1.0.0"
   }
 }

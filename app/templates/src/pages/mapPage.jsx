@@ -43,6 +43,7 @@ export default function CesiumMap(props) {
       }
       track.points = points;
     }
+    console.log(data);
 
     setTracks(data);
     setIsLoading(false);
