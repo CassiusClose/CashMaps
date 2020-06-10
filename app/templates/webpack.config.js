@@ -75,7 +75,8 @@ module.exports = (env, argv) => {
       })
     ],
     externals: {
-      cesium: "Cesium"
+      cesium: "Cesium",
+      bufferutil: "BufferUtil"
     },
     output: {
       path: __dirname + './../static',

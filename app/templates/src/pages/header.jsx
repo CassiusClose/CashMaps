@@ -21,6 +21,7 @@ export default function Header(props) {
         <button onClick={() => redirect('/upload')}>Upload</button>
         <button onClick={() => redirect('/gallery')}>Gallery</button>
         <button onClick={() => redirect('/tools')}>Tools</button>
+        <button onClick={() => redirect('/notifications')}>Notifications</button>
       </div>
       <hr/>
     </div>

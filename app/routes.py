@@ -1,6 +1,7 @@
-from app import app, db, queue
+from app import app, db, queue, socketio
 from app.models import Task
 from flask import render_template, jsonify, flash, redirect, url_for, request 
+from flask_socketio import emit
 
 #For this to work as a catchall, I couldn't stop it from also intercepting
 #requests for static files such as .css files
@@ -12,8 +13,21 @@ from flask import render_template, jsonify, flash, redirect, url_for, request
 @app.route('/upload')
 @app.route('/gallery')
 @app.route('/tools')
+@app.route('/notifications')
 def catch_all():
     return render_template('static/index.html')
+
+@socketio.on('connect', namespace='/test')
+def test_connect():
+    emit('message', {'data': 'Connected'})
+
+@socketio.on('disconnect', namespace='/test')
+def test_disconnect():
+    print('Client disconnected')
+
+@socketio.on('send_message')
+def test_receive_message(data):
+    emit('message', {'message': 'received at ' + str(data['timestamp'])})
 
 @app.route('/_clear_rq', methods=['POST'])
 def clear_rq():

@@ -1,7 +1,9 @@
 from app import app, db, queue
 from app.models import Task, FlashMessage
+from app.notifications.routes import send_notification
 from rq import get_current_job
 import os
+
 
 def start_task(func, args=[], job_type="default", metadata={}, timeout=720):
     """Adds a task to the redis queue, and creates a SQL database entry for it
@@ -79,4 +81,6 @@ def cleanup_parse(task):
     """Cleans up afer a parse task. Deletes the associated temporary file and flashes a notification
     to the SQL database."""
     os.remove(task.get_meta('filepath'))
-    FlashMessage.create_message("Parse Complete: " + task.get_meta('filename'), app.config['TASK_TYPE_PARSE'])
+    message = "Parse Complete: " + task.get_meta('filename')
+    send_notification(app.config['TASK_TYPE_PARSE'], message)
+    #FlashMessage.create_message("Parse Complete: " + task.get_meta('filename'), app.config['TASK_TYPE_PARSE'])

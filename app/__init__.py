@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from rq import Queue
 from rq.job import Job
 from redis import Redis
+from flask_socketio import SocketIO
 
 #templates: templates, static: template/dist/
 
@@ -13,10 +14,11 @@ app.config.from_object(Config)
 app.debug = True
 
 
+
 #TEMPORARY, hides standard GET and POST requests to declutter the term for finding errors
 import logging
 log = logging.getLogger('werkzeug')
-log.setLevel(logging.INFO)
+log.setLevel(logging.WARNING)
 
 
 #Databasing and migration of changes
@@ -25,8 +27,11 @@ migrate = Migrate(app, db)
 
 
 #For scheduling background tasks
-redis = Redis.from_url(app.config['REDIS_URL'])
+#redis = Redis.from_url(app.config['REDIS_URL'])
+redis = Redis.from_url('redis://')
 queue = Queue('cashmaps', connection=redis)
+
+socketio = SocketIO(app, message_queue='redis://')
 
 
 from app.parsing import parsing_bp
@@ -37,6 +42,9 @@ app.register_blueprint(map_bp)
 
 from app.uploader import uploader_bp
 app.register_blueprint(uploader_bp)
+
+from app.notifications import notifications_bp
+app.register_blueprint(notifications_bp)
 
 
 from app import routes, models

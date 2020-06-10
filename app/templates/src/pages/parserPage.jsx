@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+//import io from 'socket.io';
 import FileChooser from './../components/fileChooser';
 import ProgressBar from './../components/progressBar';
 import FlashedMessages from './../components/flashedMessagesList';
+import NotificationsList from './../components/notificationsList';
 import './parserPage.css';
 
 export default function parserPage(props) {
@@ -78,8 +80,9 @@ export default function parserPage(props) {
           }
         </div>
       </div>
-
-      <FlashedMessages url="/parser/_get_flashed_messages"/>
+      
+      <NotificationsList notification_name="parse"/>
     </div>
   );
 }
+//<FlashedMessages url="/parser/_get_flashed_messages"/>

@@ -20,7 +20,7 @@ class Config(object):
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
-    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://localhost:5000/0'
 
 
     UPLOAD_FOLDER_TEMP=os.path.join(basedir +  "/app/static/resources/temp/")

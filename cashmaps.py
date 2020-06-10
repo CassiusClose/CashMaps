@@ -1,4 +1,7 @@
-from app import app, db
+import eventlet
+eventlet.monkey_patch()
+
+from app import app, db, socketio
 from app.models import Task, FlashMessage
 from app.uploader.models import Photo
 from app.map.models import Track, TrackPoint
@@ -14,3 +17,6 @@ def make_shell_context():
 
     return {'db':db, 'Track':Track, 'TrackPoint':TrackPoint, 'Task':Task, 'FlashMessage':FlashMessage, 'Photo':Photo}
 
+
+if __name__ == '__main__':
+    socketio.run(app)
