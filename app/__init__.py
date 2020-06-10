@@ -27,11 +27,10 @@ migrate = Migrate(app, db)
 
 
 #For scheduling background tasks
-#redis = Redis.from_url(app.config['REDIS_URL'])
-redis = Redis.from_url('redis://')
+redis = Redis.from_url(app.config['REDIS_URL'])
 queue = Queue('cashmaps', connection=redis)
 
-socketio = SocketIO(app, message_queue='redis://')
+socketio = SocketIO(app, message_queue=app.config['REDIS_URL'])
 
 
 from app.parsing import parsing_bp
