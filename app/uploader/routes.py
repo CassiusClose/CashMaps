@@ -1,5 +1,4 @@
 from app import app, db
-from app.models import FlashMessage 
 #TODO is photo_uploader necessary?
 from app.uploader import uploader_bp, photo_uploader
 from app.uploader.models import Photo
@@ -15,10 +14,6 @@ def upload_photo():
         save_photo_to_system(request.files[str(i)], filepath, overwrite)
 
     return {}
-
-@uploader_bp.route('/_get_upload_flashed_messages', methods=['POST'])
-def uploader_get_upload_flashed_messages():
-    return FlashMessage.get_messages_by_type(app.config['FLASH_TYPE_UPLOAD'])
 
 @uploader_bp.route('/_get_photos', methods=['POST'])
 def uploader_get_photos():
@@ -37,7 +32,6 @@ def save_photo_to_system(f, filepath, overwrite):
             db.session.delete(photo)
             db.session.commit()
         else:
-            FlashMessage.create_message("ERROR: Photo already exists: " + relativePath, app.config['FLASH_TYPE_UPLOAD'])
             return
 
 
@@ -48,5 +42,3 @@ def save_photo_to_system(f, filepath, overwrite):
     f.save(fullpath)
 
     Photo.save_photo_to_db(fullpath, relativePath)
-
-    FlashMessage.create_message("Photo saved: " + relativePath, app.config['FLASH_TYPE_UPLOAD'])

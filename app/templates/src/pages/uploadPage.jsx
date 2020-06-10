@@ -1,6 +1,5 @@
 import React from 'react';
 import FileSaver from './../components/fileSaver';
-import FlashedMessages from './../components/flashedMessagesList';
 var path = require('path');
 
 export default class UploadPage extends React.Component {
@@ -14,7 +13,6 @@ export default class UploadPage extends React.Component {
   }
 
   updateStatus = () => {
-    this.getFlashedMessages();
   }
 
   submitForm = (files, folderpath, overwrite) => {
@@ -24,14 +22,6 @@ export default class UploadPage extends React.Component {
   }
 
   getFlashedMessages = () => {
-    var successFunc = this.setFlashedMessages
-    $.ajax({
-      url: '/_get_upload_flashed_messages',
-      type: 'POST',
-      success: function(response) {
-        successFunc(response.messages);
-      }
-    });
   }
 
   setFlashedMessages = (data) => {
@@ -82,9 +72,6 @@ export default class UploadPage extends React.Component {
           onSubmit={this.submitForm}
           errors={this.state.uploadErrors}
           accept={"image/*"}
-        />
-        <FlashedMessages
-          flashedMessages = {this.state.flashedMessages}
         />
       </div>
     );

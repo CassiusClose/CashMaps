@@ -1,5 +1,4 @@
 from app import app, db, queue
-from app.models import Task, FlashMessage
 from app.notifications.routes import send_notification
 from rq import get_current_job
 import os
@@ -83,4 +82,3 @@ def cleanup_parse(task):
     os.remove(task.get_meta('filepath'))
     message = "Parse Complete: " + task.get_meta('filename')
     send_notification(app.config['TASK_TYPE_PARSE'], message)
-    #FlashMessage.create_message("Parse Complete: " + task.get_meta('filename'), app.config['TASK_TYPE_PARSE'])

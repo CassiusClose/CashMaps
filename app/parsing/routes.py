@@ -26,8 +26,3 @@ def parser_start_parse():
 def parser_get_progress(): 
     """Returns info about all active parser tasks"""
     return Task.get_tasks_by_type(app.config['TASK_TYPE_PARSE'])
-
-@parsing_bp.route('/parser/_get_flashed_messages', methods=['POST'])
-def parser_get_flashed_messages():
-    """Returns all SQL flashed messages related to parsing."""
-    return FlashMessage.get_messages_by_type(app.config['TASK_TYPE_PARSE'])
