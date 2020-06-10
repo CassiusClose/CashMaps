@@ -1,6 +1,5 @@
 from app import db
-from app.models import Task, FlashMessage
+from app.models import Task
 
 Task.query.delete()
-FlashMessage.query.delete()
 db.session.commit()

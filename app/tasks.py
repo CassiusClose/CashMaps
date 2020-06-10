@@ -1,5 +1,6 @@
 from app import app, db, queue
-from app.notifications.routes import send_notification
+from app.models import Task
+from app.utils import send_notification
 from rq import get_current_job
 import os
 

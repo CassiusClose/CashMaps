@@ -1,4 +1,3 @@
-from app.notifications import notifications_bp
 from flask import request
 from flask_socketio import emit
 from app import socketio

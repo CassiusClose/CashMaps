@@ -42,8 +42,4 @@ app.register_blueprint(map_bp)
 from app.uploader import uploader_bp
 app.register_blueprint(uploader_bp)
 
-from app.notifications import notifications_bp
-app.register_blueprint(notifications_bp)
-
-
 from app import routes, models
