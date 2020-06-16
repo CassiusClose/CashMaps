@@ -8,9 +8,10 @@ from flask import abort, flash
 from sqlalchemy import exc
 from rq import get_current_job
 
-from app import db
+from app import app, db
 from app.map.models import Track, TrackPoint
 from app import socketio
+from app.utils import send_notification
 
 def broadcast_progress(job_id, progress, max_progress, filename):
     data = {
@@ -93,7 +94,9 @@ def parse_homeport(filepath):
 
     job = get_current_job()
     broadcast_finished(job.get_id())
+    send_notification(app.config['TASK_TYPE_PARSE'], "Parse Complete: " + job.meta['filename'])
 
+    os.remove(job.meta['filepath'])
 
     f.close()
 

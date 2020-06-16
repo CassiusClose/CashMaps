@@ -2,7 +2,6 @@ import eventlet
 eventlet.monkey_patch()
 
 from app import app, db, socketio
-from app.models import Task
 from app.uploader.models import Photo
 from app.map.models import Track, TrackPoint
 import logging
@@ -15,7 +14,7 @@ logging.basicConfig(level=os.environ.get("LOGLEVEL", "INFO"), format='%(message)
 def make_shell_context():
     """Sets up automatic imports for the flask python shell to make testing easier"""
 
-    return {'db':db, 'Track':Track, 'TrackPoint':TrackPoint, 'Task':Task, 'Photo':Photo}
+    return {'db':db, 'Track':Track, 'TrackPoint':TrackPoint, 'Photo':Photo}
 
 
 if __name__ == '__main__':

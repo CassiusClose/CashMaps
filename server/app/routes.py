@@ -1,5 +1,4 @@
 from app import app, db, queue, socketio
-from app.models import Task
 from flask import render_template, jsonify, flash, redirect, url_for, request 
 from flask_socketio import emit
 
@@ -32,8 +31,6 @@ def test_receive_message(data):
 @app.route('/_clear_rq', methods=['POST'])
 def clear_rq():
     queue.empty()
-    Task.query.delete()
-    db.session.commit()
     return {}
 
 @app.route('/_upload_photo', methods=['POST'])

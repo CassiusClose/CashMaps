@@ -1,7 +1,6 @@
 from app import app, db, queue
 from app.tasks import start_task
 from app.parsing import parsing_bp
-from app.models import Task
 from app.parsing.parsers.homeport_parser import parse_homeport
 from flask import request, get_flashed_messages, flash
 import os
@@ -21,8 +20,3 @@ def parser_start_parse():
         job_id = start_task(func=parse_homeport, args=(filepath,), job_type=app.config['TASK_TYPE_PARSE'], metadata={'filename':f.filename, 'filepath':filepath}) 
 
     return {}
-
-@parsing_bp.route('/parser/_get_progress', methods=['POST'])
-def parser_get_progress(): 
-    """Returns info about all active parser tasks"""
-    return Task.get_tasks_by_type(app.config['TASK_TYPE_PARSE'])

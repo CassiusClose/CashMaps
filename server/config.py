@@ -1,9 +1,13 @@
 import os
 
-basedir = os.path.abspath(os.path.dirname(__file__))
-os.environ['PYTHONUNBUFFERED'] = "TRUE"
 
 class Config(object):
+    basedir = os.path.abspath(os.path.dirname(__file__))
+
+    # Set unbuffered output, i.e., output is sent immediately to STDOUT instead
+    # of being buffered
+    os.environ['PYTHONUNBUFFERED'] = "TRUE"
+
     #For encryption or something
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'cash_MapS_Key_Babyy'
 
@@ -13,10 +17,9 @@ class Config(object):
     #determined at the beginning
     #Preferably, it could just be done from the static location
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-            #'sqlite:////' + os.path.join(basedir +  '/app/static/resources/database.db')
+        #'sqlite:////' + os.path.join(basedir +  '/app/static/resources/database.db')
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + basedir + '/app/static/resources/database.db'
-    print(SQLALCHEMY_DATABASE_URI)
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 

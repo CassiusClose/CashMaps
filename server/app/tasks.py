@@ -1,5 +1,4 @@
 from app import app, db, queue
-from app.models import Task
 from app.utils import send_notification
 from rq import get_current_job
 import os
@@ -30,20 +29,21 @@ def start_task(func, args=[], job_type="default", metadata={}, timeout=720):
         job.meta[key] = metadata[key]
     job.save_meta()
 
-    #Add entry to SQL database
-    progress = Task(job_id=job.get_id(), job_type=job_type)
-    db.session.add(progress)
-    db.session.commit()
-
     return job.get_id()
 
 def go(func, args, metadata):
     """Helper function for start_task(). Acts as the target of a redis queue job.
 
-    This function acts as the target function when starting a task with redis queue. The real
-    function to be called as the task is passed to this. This way, this function can set job metadata
-    and cleanup after the task is finished. This lets the real function remain independent of this
-    task setup.
+    This function acts as the target function when starting a task with redis
+    queue. The real function to be called as the task is passed to this. This
+    way, this function can set job metadata and cleanup after the task is
+    finished. This lets the real function remain independent of this task setup.
+
+    In short, the issue is that job metadata is erased (or in a different
+    context somehow) once the job starts, so by making go() the job's target,
+    we can set the job's metadata and have it stick for the actual function
+    that is undertaking the job.
+
 
     :param func: The real task function. go() is just a helper to call this function.
     :param args: Arguments for the task function
@@ -56,30 +56,3 @@ def go(func, args, metadata):
     job.save_meta()
 
     func(*args)
-
-    cleanup_task()
-
-def cleanup_task():
-    """Cleans up after a completed RQ job and removes its correlated SQL entry from the database."""
-
-    job_id = get_current_job().get_id()
-    task = Task.query.filter_by(job_id=job_id).first()
-
-    #Call job-type specific cleanup functions
-    callback_switch = {
-        'parse': cleanup_parse,
-    }
-    callback = callback_switch.get(task.job_type)
-    if(callback):
-        callback(task)
-
-    #Remove the task from the SQL database
-    db.session.delete(task)
-    db.session.commit()
-
-def cleanup_parse(task):
-    """Cleans up afer a parse task. Deletes the associated temporary file and flashes a notification
-    to the SQL database."""
-    os.remove(task.get_meta('filepath'))
-    message = "Parse Complete: " + task.get_meta('filename')
-    send_notification(app.config['TASK_TYPE_PARSE'], message)
