@@ -1,2 +1,0 @@
---Sockets
-bufferutil, utf-8-validate, required for ws, required for socket.io

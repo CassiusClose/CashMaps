@@ -1,0 +1,25 @@
+.Header_Container {
+    margin: 0 0 20px 0;
+}
+
+
+.Header_Links {
+    margin: 0 0 0px 0;
+}
+
+.Header_Links button {
+    margin: 0 0px;
+    width: 100px;
+    border-style: none;
+    padding: 6px;
+    background-color: rgb(200, 200, 200);
+    color: black;
+    font-family: "Trebuchet MS";
+    font-style: bold;
+    font-size: 17px;
+    border-radius: 3px;
+}
+
+.Header_Links button:hover {
+    background-color: rgb(230, 230, 230);
+}
