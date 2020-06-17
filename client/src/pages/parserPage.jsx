@@ -58,27 +58,6 @@ export default function parserPage(props) {
 
   }
 
-  /*useEffect(() => {
-    console.log('fetching...');
-    var scheduler = setTimeout(() => {
-      $.ajax({
-        url: '/parser/_get_progress',
-        type: 'POST',
-        success: function(response) {
-          console.log("receieved");
-          if(response.tasks) {
-            setActiveParsers([...response.tasks]);
-            setCounter((counter+1)%100);
-          }
-        }
-      });
-    }, FETCH_PARSER_INFO_DELAY);
-
-    return () => {
-      clearTimeout(scheduler);
-    };
-  })*/
-
   const onFileSubmit = (files) => {
     setFiles(files);
     startParse(files);

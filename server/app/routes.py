@@ -12,7 +12,6 @@ from flask_socketio import emit
 @app.route('/upload')
 @app.route('/gallery')
 @app.route('/tools')
-@app.route('/notifications')
 def catch_all():
     return render_template('static/index.html')
 

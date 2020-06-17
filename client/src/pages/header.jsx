@@ -18,10 +18,7 @@ export default function Header(props) {
         <button onClick={() => redirect('/')}>About</button>
         <button onClick={() => redirect('/parser')}>Parsers</button>
         <button onClick={() => redirect('/map')}>Map</button>
-        <button onClick={() => redirect('/upload')}>Upload</button>
-        <button onClick={() => redirect('/gallery')}>Gallery</button>
         <button onClick={() => redirect('/tools')}>Tools</button>
-        <button onClick={() => redirect('/notifications')}>Notifications</button>
       </div>
       <hr/>
     </div>
@@ -29,4 +26,6 @@ export default function Header(props) {
 }
 
 //Hidden links
-        <button onClick={() => redirect('/files')}>Files</button>
+//<button onClick={() => redirect('/files')}>Files</button>
+//<button onClick={() => redirect('/upload')}>Upload</button>
+//<button onClick={() => redirect('/gallery')}>Gallery</button>

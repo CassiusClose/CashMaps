@@ -35,30 +35,3 @@ export default function FileChooser(props) {
 }
 
 FileChooser.defaultProps = { className: "superdiv" }
-
-/*export default class FileChooser extends React.Component {
-  constructor(props) {
-    super(props);
-
-    var superdiv = "superdiv";
-    if(props.className != null) {
-      superdiv = props.className;
-    }
-
-    this.state = {files:null, className:props.className};
-  }
-
-  submit = (e) => {
-    event.preventDefault(); //Prevent form from redirecting webpage
-    if(this.props.onSubmit && this.state.files) {
-      this.props.onSubmit(this.state.files);
-    }
-  }
-
-  onInput = (e) => {
-    this.setState({ files: e.target.files });
-  }
-
-  render() {
-  }
-}*/
