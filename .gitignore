@@ -21,11 +21,7 @@ node_modules/
 
 temp/
 
-server/app/static/photos
-server/app/static/cesium/
-server/app/static/res/
-server/app/static/resources/
-server/app/static/bundle.js
+server/app/static/
 
 
 Production
