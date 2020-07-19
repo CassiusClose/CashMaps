@@ -1,7 +1,7 @@
-from app import app, db
+from cashmaps import app, db
 #TODO is photo_uploader necessary?
-from app.uploader import uploader_bp, photo_uploader
-from app.uploader.models import Photo
+from cashmaps.uploader import uploader_bp, photo_uploader
+from cashmaps.uploader.models import Photo
 from flask import request
 import os
 

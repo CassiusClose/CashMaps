@@ -1,4 +1,4 @@
-from app import app, db, queue, socketio
+from cashmaps import app, db, queue, socketio
 from flask import render_template, jsonify, flash, redirect, url_for, request 
 from flask_socketio import emit
 

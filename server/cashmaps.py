@@ -1,9 +1,9 @@
 import eventlet
 eventlet.monkey_patch()
 
-from app import app, db, socketio
-from app.uploader.models import Photo
-from app.map.models import Track, TrackPoint
+from cashmaps import app, db, socketio
+from cashmaps.uploader.models import Photo
+from cashmaps.map.models import Track, TrackPoint
 import logging
 import os
 

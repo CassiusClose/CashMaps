@@ -1,5 +1,5 @@
-from app import db
-from app.models import results_to_arr
+from cashmaps import db
+from cashmaps.models import results_to_arr
 
 #Be careful of ForeignKey case! 'ForeignKey' would become 'foreign_key'. Underscores
 #are kept

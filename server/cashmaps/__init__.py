@@ -33,13 +33,13 @@ queue = Queue('cashmaps', connection=redis)
 socketio = SocketIO(app, message_queue=app.config['REDIS_URL'])
 
 
-from app.parsing import parsing_bp
+from cashmaps.parsing import parsing_bp
 app.register_blueprint(parsing_bp)
 
-from app.map import map_bp
+from cashmaps.map import map_bp
 app.register_blueprint(map_bp)
 
-from app.uploader import uploader_bp
+from cashmaps.uploader import uploader_bp
 app.register_blueprint(uploader_bp)
 
-from app import routes, models
+from cashmaps import routes, models

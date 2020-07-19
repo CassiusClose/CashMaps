@@ -1,5 +1,5 @@
-from app import app, db
-from app.models import results_to_arr
+from cashmaps import app, db
+from cashmaps.models import results_to_arr
 import PIL
 from PIL import Image
 

@@ -8,10 +8,10 @@ from flask import abort, flash
 from sqlalchemy import exc
 from rq import get_current_job
 
-from app import app, db
-from app.map.models import Track, TrackPoint
-from app import socketio
-from app.utils import send_notification
+from cashmaps import app, db
+from cashmaps.map.models import Track, TrackPoint
+from cashmaps import socketio
+from cashmaps.utils import send_notification
 
 def broadcast_progress(job_id, progress, max_progress, filename):
     data = {
@@ -26,7 +26,8 @@ def broadcast_finished(job_id):
     socketio.emit('parser_finish', {'job_id':job_id}, namespace='/parsers')
     
 
-#-Helper Functions
+
+# Helper Functions
 def removeEmptyFromList(lines):
     #Any lines that are empty or only spaces are not added to the return list
     return [l for l in lines if not (not l or l.isspace())]
@@ -66,10 +67,12 @@ def parse_homeport(filepath):
     except IOError:
         abort(404, "ERROR: Homeport Parser - File not found: " + filepath)
 
+    filename = os.path.basename(filepath)
     
-    #A handy regex expression to split the contents of the file by the items in
-    #the categories list. The resulting strings do not contain the items that they
-    #were split with.
+    
+    # A handy regular expression to split the contents of the file by the items in
+    # the categories list. The resulting strings do not contain the items that they
+    # were split with.
     regex = r"\b(?:{})\b".format("|".join(categories))
 
     #split with regex
@@ -94,9 +97,9 @@ def parse_homeport(filepath):
 
     job = get_current_job()
     broadcast_finished(job.get_id())
-    send_notification(app.config['TASK_TYPE_PARSE'], "Parse Complete: " + job.meta['filename'])
+    send_notification(app.config['TASK_TYPE_PARSE'], "Parse Complete: " + filename)
 
-    os.remove(job.meta['filepath'])
+    os.remove(filepath)
 
     f.close()
 
@@ -138,6 +141,7 @@ def process_trk(string):
 
     return tracks
 
+
 def process_trkpt(string, tracks):
     """Initializes track points from the file and adds them to the database"""
 
@@ -147,19 +151,11 @@ def process_trkpt(string, tracks):
     lines = string.split('\n')
     lines = removeEmptyFromList(lines)
 
-    broadcast_progress(job.get_id(), 0, len(lines)-1, job.meta['filename'])
-    job.meta['max_progress'] = len(lines)-1
-    job.meta['progress'] = 0
-    job.get_id()
-    job.meta['filename']
-
-    job.save_meta()
+    broadcast_progress(job.get_id(), 0, len(lines)-1, filename)
 
     #start at 1 to ignore the titles, which aren't data
     for i in range(1, len(lines)):
-        job.meta['progress'] = i
-        broadcast_progress(job.get_id(), i, len(lines)-1, job.meta['filename'])
-        job.save_meta()
+        broadcast_progress(job.get_id(), i, len(lines)-1, filename)
 
         #Split into attributes, which are separated by tabs
         attrs = lines[i].split('\t')

@@ -1,7 +1,7 @@
-from app import app, db, queue
-from app.tasks import start_task
-from app.parsing import parsing_bp
-from app.parsing.parsers.homeport_parser import parse_homeport
+from cashmaps import app, db, queue
+from cashmaps.tasks import start_task
+from cashmaps.parsing import parsing_bp
+from cashmaps.parsing.parsers.homeport_parser import parse_homeport
 from flask import request, get_flashed_messages, flash
 import os
 

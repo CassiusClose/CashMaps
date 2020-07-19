@@ -19,15 +19,15 @@ class Config(object):
     #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
         #'sqlite:////' + os.path.join(basedir +  '/app/static/resources/database.db')
 
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + basedir + '/app/static/resources/database.db'
+    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + basedir + '/cashmaps/static/resources/database.db'
     #Turns off notifications when the database is updated
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
 
 
-    UPLOAD_FOLDER_TEMP=os.path.join(basedir +  "/app/static/resources/temp/")
-    UPLOAD_FOLDER_PHOTOS=os.path.join(basedir + "/app/static/photos/")
+    UPLOAD_FOLDER_TEMP=os.path.join(basedir +  "/cashmaps/static/resources/temp/")
+    UPLOAD_FOLDER_PHOTOS=os.path.join(basedir + "/cashmaps/static/photos/")
 
 
 

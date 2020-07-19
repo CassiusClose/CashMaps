@@ -1,6 +1,6 @@
-from app import app
-from app.map import map_bp
-from app.map.models import Track, TrackPoint
+from cashmaps import app
+from cashmaps.map import map_bp
+from cashmaps.map.models import Track, TrackPoint
 from flask import jsonify
 
 @map_bp.route('/map/_get_data', methods=['POST'])

@@ -1,5 +1,5 @@
-from app import app, db, queue
-from app.utils import send_notification
+from cashmaps import app, db, queue
+from cashmaps.utils import send_notification
 from rq import get_current_job
 import os
 
@@ -20,16 +20,20 @@ def start_task(func, args=[], job_type="default", metadata={}, timeout=720):
     """
 
     #create the argument list for go() and enqueues the job
-    arg_list = [func, args, metadata]
-    job = queue.enqueue_call(func=go, args=arg_list, timeout=timeout)
+    #arg_list = [func, args, metadata]
+    #job = queue.enqueue_call(func=go, args=arg_list, timeout=timeout)
+    job = queue.enqueue_call(func=func, args=args, timeout=timeout)
 
     #Metadata is applied here so it shows up while the task is waiting to start
     #Once the task starts, any metadata set here will be lost
+    """
     for key in metadata:
         job.meta[key] = metadata[key]
     job.save_meta()
+    """
 
     return job.get_id()
+
 
 def go(func, args, metadata):
     """Helper function for start_task(). Acts as the target of a redis queue job.
