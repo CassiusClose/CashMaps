@@ -41,18 +41,24 @@ module.exports = (env, argv) => {
             to: "cesium"
           } 
       ]),*/
+
+      // Copy over Cesium resources to static folder
       new CopyWebpackPlugin([
           {
             from: 'node_modules/cesium/Build/CesiumUnminified',
             to: "cesium"
           } 
       ]),
+
+      // Copy over jquery to static folder
       new CopyWebpackPlugin([
         {
           from: 'src/res/jquery-1.9.0.js',
           to: 'res'
         }
       ]),
+
+      // Copy over React plugin resources to static folder
       new CopyWebpackPlugin([
         {
           from: 'node_modules/react-grid-layout/css/styles.css',
@@ -65,10 +71,15 @@ module.exports = (env, argv) => {
           to: 'res/react-resizable/css'
         }
       ]),
+
+      // Sum all react files into one index.html file
       new HtmlWebpackPlugin({
         filepath: __dirname +  './../static',
         template: 'index.html',
       }),
+
+      // Specifically link to styles and js files that aren't copied by
+      // copy-webpack?
       new HtmlWebpackTagsPlugin({
         tags: ['cesium/Widgets/widgets.css', 'cesium/Cesium.js', 'res/jquery-1.9.0.js', 'res/react-grid-layout/css/styles.css', 'res/react-resizable/css/styles.css'],
         append: false
@@ -79,7 +90,7 @@ module.exports = (env, argv) => {
       bufferutil: "BufferUtil"
     },
     output: {
-      path: __dirname + './../server/app/static',
+      path: __dirname + './../server/cashmaps/static',
       publicPath: '',
       filename: 'bundle.js',
     },

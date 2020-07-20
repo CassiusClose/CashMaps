@@ -12,19 +12,8 @@ from cashmaps import app, db
 from cashmaps.map.models import Track, TrackPoint
 from cashmaps import socketio
 from cashmaps.utils import send_notification
+from cashmaps.parsing.utils import *
 
-def broadcast_progress(job_id, progress, max_progress, filename):
-    data = {
-        'job_id': job_id,
-        'progress': progress,
-        'max_progress': max_progress,
-        'filename': filename
-    }
-    socketio.emit('parser_update', data, broadcast=True, namespace='/parsers')
-
-def broadcast_finished(job_id):
-    socketio.emit('parser_finish', {'job_id':job_id}, namespace='/parsers')
-    
 
 
 # Helper Functions
@@ -53,14 +42,11 @@ def get_timestamp(string):
 categories = ['metadata', 'author', 'copyright', 'link', 'rte', 'retpt', 'wpt', 'Address', 'PhoneNumber', 'Categories', 'trk', 'trkseg', 'trkpt']
 
 
-#Using a callback here is annoying, it would be nice if rq had a way to
-#implement callbacks after tasks
 def parse_homeport(filepath):
     """Parses a Garmin Homeport exported txt file and adds its data to the database"""
 
-    #Open the file and read the contents
-    #Encode with utf-8-sig otherwise there will be annoying whitespace characters
-
+    # Open the file and read the contents
+    # Encode with utf-8-sig otherwise there will be annoying whitespace characters
     try:
         f = open(filepath, "r", encoding='utf-8-sig')
         contents = f.read()
@@ -74,39 +60,37 @@ def parse_homeport(filepath):
     # the categories list. The resulting strings do not contain the items that they
     # were split with.
     regex = r"\b(?:{})\b".format("|".join(categories))
+    sections = re.split(regex, contents)
 
-    #split with regex
-    strings = re.split(regex, contents)
-
-    #The first string tends to be empty and should be removed. So far this is the
-    #only one
-    if(strings[0].isspace()):
-        del strings[0]
+    # The first string tends to be empty and should be removed. So far this is the
+    # only one
+    if(sections[0].isspace()):
+        del sections[0]
 
 
-    tracks = process_trk(strings[10])
+    # Create each track listed in the file, then create the points in those tracks
+    track_objects = process_trk(sections[10], filename)
+    process_trkpt(sections[12], track_objects, filename)
 
-    process_trkpt(strings[12], tracks)
-
-    for t in tracks:
-        print(len(Track.query.get(t.database_id).points.all()))
+    # If any of the tracks created above have no points in them, they are either empty
+    # or redundant, so delete them
+    for t in track_objects:
         if(len(Track.query.get(t.database_id).points.all()) == 0):
             db.session.delete(Track.query.get(t.database_id))
             db.session.commit()
 
 
+    # Send out an alert that this job is finished
     job = get_current_job()
-    broadcast_finished(job.get_id())
-    send_notification(app.config['TASK_TYPE_PARSE'], "Parse Complete: " + filename)
-
-    os.remove(filepath)
+    if job:
+        broadcast_finished(job.get_id(), filename)
 
     f.close()
 
 #-Functions to process each category
 #Most of these are ignored for now because the data is not relevant 
 
-def process_trk(string):
+def process_trk(string, filename):
     """Initializes the file's tracks"""
 
     tracks = []
@@ -126,23 +110,23 @@ def process_trk(string):
         #Create the Track database object and add it to the database
         #Undo the changes if a uniqueness error is thrown
         #So right now, it'll only undo the current track
-        track = Track(track_id=id)
+        track = Track(track_id=id, filename=filename)
         db.session.add(track)
         try:
             db.session.commit()
         except exc.IntegrityError:
             db.session.rollback()
-            print("Error: tried to add track with the id of an existing track")
+            #print("Error: tried to add track with the id of an existing track")
             continue 
 
         tracks.append(track)
 
-        print("Created track with id " + str(id))
+        #print("Created track with id " + str(id))
 
     return tracks
 
 
-def process_trkpt(string, tracks):
+def process_trkpt(string, tracks, filename):
     """Initializes track points from the file and adds them to the database"""
 
     job = get_current_job()
@@ -151,38 +135,39 @@ def process_trkpt(string, tracks):
     lines = string.split('\n')
     lines = removeEmptyFromList(lines)
 
-    broadcast_progress(job.get_id(), 0, len(lines)-1, filename)
+    if job:
+        broadcast_progress(job.get_id(), 0, len(lines)-1, filename)
 
     #start at 1 to ignore the titles, which aren't data
     for i in range(1, len(lines)):
-        broadcast_progress(job.get_id(), i, len(lines)-1, filename)
+        if job:
+            broadcast_progress(job.get_id(), i, len(lines)-1, filename)
 
         #Split into attributes, which are separated by tabs
         attrs = lines[i].split('\t')
+
+        timestamp = get_timestamp(attrs[5])
+
+        if TrackPoint.query.filter_by(timestamp=timestamp).first():
+            print("Error: tried to add track point with the id of an existing point: " + str(id))
+            continue
 
         #Read in attributes, order has to be hard-coded
         id = int(attrs[0])
         track_id = int(attrs[1])
         latitude = float(attrs[2])
         longitude = float(attrs[3])
-        timestamp = get_timestamp(attrs[5])
 
         #Create the database TrackPoint object and add it to the database
-        #Undo the changes if a uniqueness error is thrown
-        #So right now, it'll only undo the current point 
-        #HACKY FOR NOW
         track = None
         for t in tracks:
             if track_id == t.track_id:
                 track = t
                 break
-        point = TrackPoint(track=track, latitude=latitude, longitude=longitude, timestamp=timestamp)
+
+        point = TrackPoint(track=track, latitude=latitude, longitude=longitude,
+                timestamp=timestamp)
         db.session.add(point)
-        try:
-            db.session.commit()
-        except exc.IntegrityError as e:
-            db.session.rollback()
-            print("Error: tried to add track point with the id of an existing point: " + str(id))
-            continue
+        db.session.commit()
 
         print("Created point with id " + str(id))

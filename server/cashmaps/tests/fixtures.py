@@ -1,10 +1,11 @@
 import os 
 import tempfile
-
+import time
 import pytest
+from rq import SimpleWorker, get_current_job
 
 from config import Config
-from cashmaps import app, db
+from cashmaps import app, db, queue
 
 @pytest.fixture
 def client():
@@ -21,6 +22,3 @@ def client():
     db.drop_all()
 
 
-
-def test_test(client):
-    assert 4 == 4

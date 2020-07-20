@@ -11,6 +11,7 @@ class Track(db.Model):
 
     #The track ID as marked in the file, which means often 1-10. This will be redundant across tracks.
     track_id = db.Column(db.Integer)
+    filename = db.Column(db.String(60))
 
     #Relates this track to its list of points
     points = db.relationship('TrackPoint', backref='track', lazy='dynamic')
