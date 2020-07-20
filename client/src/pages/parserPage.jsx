@@ -21,6 +21,10 @@ export default function parserPage(props) {
   });
 
   useEffect(() => {
+    socket_parsers.on('parser_start', (data) => {
+      updateParser(data);
+    });
+
     socket_parsers.on('parser_update', (data) => {
       updateParser(data);
 

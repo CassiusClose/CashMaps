@@ -2,6 +2,7 @@ from cashmaps import app, db, queue
 from cashmaps.tasks import start_task
 from cashmaps.parsing import parsing_bp
 from cashmaps.parsing.parsers.homeport_parser import parse_homeport
+from cashmaps.parsing.utils import broadcast_start
 from flask import request, get_flashed_messages, flash
 import os
 
@@ -17,6 +18,14 @@ def parser_start_parse():
         filepath = os.path.join(app.config['UPLOAD_FOLDER_TEMP'], f.filename)
         f.save(filepath)
 
-        job_id = start_task(func=parse_homeport, args=(filepath,), job_type=app.config['TASK_TYPE_PARSE'], metadata={'filename':f.filename, 'filepath':filepath}) 
+        job_id = start_task(
+                func=parse_homeport,
+                args=(filepath,),
+                job_type=app.config['TASK_TYPE_PARSE'],
+                metadata={'filename':f.filename, 'filepath':filepath},
+                callback=os.remove,
+                callback_args=filepath,
+        ) 
+        broadcast_start(job_id, f.filename) 
 
     return {}
