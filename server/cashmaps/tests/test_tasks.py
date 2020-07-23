@@ -9,13 +9,15 @@ from rq.job import JobStatus
 
 from config import Config
 from cashmaps import app, db, queue
-from cashmaps.tasks import start_task
+from cashmaps.tasks import start_task, task_exception_handler
 
 from cashmaps.tests.fixtures import client
 
 
 def start_worker():
-    worker = SimpleWorker([queue], connection=queue.connection)
+    worker = SimpleWorker([queue], connection=queue.connection,
+            exception_handlers=[task_exception_handler],
+            disable_default_exception_handler=True)
     worker.work(burst=True)
     return worker
 
@@ -40,11 +42,26 @@ def job_send_meta():
     job.save_meta()
     return 'hello'
 
+def job_exception():
+    raise Exception("This is an error.")
+
 def callback():
     print("WOOHOO")
 
 def callback_args(string):
     print(string)
+
+def exception_callback_print_value(job, exc_type, exc_value, traceback):
+    print(exc_type)
+    print(exc_value)
+
+def exception_callback_print_meta(job, exc_type, exc_value, traceback):
+    print(job.meta.get('test'))
+
+def exception_callback_args(job, exc_type, exc_value, traceback, a, b):
+    print(str(a + b))
+
+
 
 
 class TestStartTask:
@@ -124,3 +141,47 @@ class TestStartTask:
         out, err = capfd.readouterr()
         assert out == 'hello\n'
         assert job.result == 'hi'
+
+
+    def test_job_exception_callback_print_exc_message(self, client, capfd):
+        """
+        If an exception callback function is passed to start_task(), then the function
+        should be called if an exception is raised in the job. It should be given information
+        about the exception (type, message, traceback).
+        """
+        job = start_task(job_exception, exc_callback=exception_callback_print_value)
+        start_worker()
+
+        out, err = capfd.readouterr()
+        assert out == "<class 'Exception'>\nThis is an error.\n"
+
+
+    def test_job_exception_callback_print_meta(self, client, capfd):
+        """
+        If an exception callback function is passed to start_task(), then the function should
+        be called if an exception is raised in the job. It should be given the instance of the
+        job that caused the exception, and thus be able to access that job's metadata.
+        """
+        job = start_task(job_exception, metadata={'test':'hello'},
+                exc_callback=exception_callback_print_meta)
+        start_worker()
+
+        out, err = capfd.readouterr()
+        assert out == 'hello\n'
+
+
+    def test_job_exception_callback_args(self, client, capfd):
+        """
+        If an exception callback function is passed to start_task(), then the function should
+        be called if an exception is raised in the job. start_task() should accept additional
+        arguments (apart from the job and exception data) and pass them along to the callback
+        function.
+        """
+        job = start_task(job_exception, exc_callback=exception_callback_args,
+                exc_callback_args=[3, 8])
+        start_worker()
+
+        out, err = capfd.readouterr()
+        assert out == '11\n'
+
+        

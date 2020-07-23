@@ -8,8 +8,8 @@ htmlcov/
 
 *.db
 
-notes.todo
-notes.todo~
+todo.todo
+todo.todo~
 changelog/
 misc/
 
