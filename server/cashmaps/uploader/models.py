@@ -1,5 +1,6 @@
-from cashmaps import app, db
+from cashmaps import db
 from cashmaps.models import results_to_arr
+from flask import current_app
 import PIL
 from PIL import Image
 

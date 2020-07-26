@@ -1,10 +1,14 @@
-from cashmaps import app, db, queue
+from cashmaps import db, queue, create_app
 from cashmaps.utils import send_notification
+from flask import current_app
 from rq import get_current_job
 from rq.timeouts import JobTimeoutException
+from flask.cli import ScriptInfo
 import os
 import logging
 
+#app = create_app()
+#app.app_context().push()
 
 def start_task(func, args=[], metadata={}, timeout=720, callback=None, callback_args=[], exc_callback=None, exc_callback_args=[]):
     """
@@ -51,11 +55,11 @@ def start_task(func, args=[], metadata={}, timeout=720, callback=None, callback_
         The job created to perform the given task
     """
 
+    #current_app.app_context().push()
 
     #create the argument list for go() and enqueues the job
-    arg_list = [func, args, callback, callback_args]
+    arg_list = [func, args, callback, callback_args] 
     job = queue.enqueue_call(func=go, args=arg_list, timeout=timeout)
-
 
     # Save any metadata passed in to the job's metadata
     for key in metadata:
@@ -93,17 +97,25 @@ def go(func, args, callback, callback_args):
         Arguments to the callback function
 
     """
-    
-    job = get_current_job()
-    job.refresh() # Fetch meta data set in start_task()
 
-    # Call the actual job function
-    return_val = func(*args)
+    # Stole this from Flask-RQ2. It works, but I'm not sure why yet.
+    # https://github.com/rq/Flask-RQ2/blob/master/src/flask_rq2/job.py
+    if current_app:
+        app = current_app
+    else:
+        app = ScriptInfo().load_app()
+        
+    with app.app_context():
+        job = get_current_job()
+        job.refresh() # Fetch meta data set in start_task()
 
-    if callback:
-        callback(*callback_args)
+        # Call the actual job function
+        return_val = func(*args)
 
-    return return_val
+        if callback:
+            callback(*callback_args)
+
+        return return_val
 
 
 

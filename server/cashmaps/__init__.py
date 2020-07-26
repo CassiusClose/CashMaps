@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from config import Config
 from flask_sqlalchemy import SQLAlchemy
@@ -9,37 +11,44 @@ from flask_socketio import SocketIO
 
 #templates: templates, static: template/dist/
 
-app = Flask(__name__, template_folder='', static_folder='static/')
-app.config.from_object(Config)
-app.debug = True
-
-
-
-#TEMPORARY, hides standard GET and POST requests to declutter the term for finding errors
-import logging
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.WARNING)
-
-
-#Databasing and migration of changes
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-
-#For scheduling background tasks
-redis = Redis.from_url(app.config['REDIS_URL'])
+db = SQLAlchemy()
+migrate = Migrate()
+redis = Redis.from_url(os.environ.get('REDIS_URL') or 'redis://')
 queue = Queue('cashmaps', connection=redis)
+socketio = SocketIO()
 
-socketio = SocketIO(app, message_queue=app.config['REDIS_URL'])
+def create_app(test_config=None):
+
+    app = Flask(__name__, template_folder='', static_folder='static/')
+    app.config.from_object(Config)
+    app.debug = True
 
 
-from cashmaps.parsing import parsing_bp
-app.register_blueprint(parsing_bp)
 
-from cashmaps.map import map_bp
-app.register_blueprint(map_bp)
+    #TEMPORARY, hides standard GET and POST requests to declutter the term for finding errors
+    import logging
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.WARNING)
 
-from cashmaps.uploader import uploader_bp
-app.register_blueprint(uploader_bp)
 
-from cashmaps import routes, models
+    #Databasing and migration of changes
+    with app.app_context():
+        db.init_app(app)
+        migrate.init_app(app, db)
+
+
+        socketio.init_app(app, message_queue=app.config['REDIS_URL'])
+
+
+        from cashmaps.parsing import parsing_bp
+        app.register_blueprint(parsing_bp)
+
+        from cashmaps.map import map_bp
+        app.register_blueprint(map_bp)
+
+        from cashmaps.uploader import uploader_bp
+        app.register_blueprint(uploader_bp)
+
+        from cashmaps import routes, models
+
+        return app

@@ -1,4 +1,3 @@
-from cashmaps import app
 from flask import Blueprint
 from flask_uploads import UploadSet, IMAGES
 

@@ -4,11 +4,11 @@ import datetime
 import threading
 import logging as log
 
-from flask import abort, flash
+from flask import abort, flash, current_app
 from sqlalchemy import exc
 from rq import get_current_job
 
-from cashmaps import app, db
+from cashmaps import db
 from cashmaps.map.models import Track, TrackPoint
 from cashmaps import socketio
 from cashmaps.utils import send_notification
@@ -77,15 +77,11 @@ def parse_homeport(filepath):
     for t in track_objects:
         if(len(Track.query.get(t.database_id).points.all()) == 0):
             db.session.delete(Track.query.get(t.database_id))
-            db.session.commit()
 
-
-    # Send out an alert that this job is finished
-    job = get_current_job()
-    if job:
-        broadcast_finished(job.get_id(), filename)
 
     f.close()
+    db.session.commit()
+
 
 #-Functions to process each category
 #Most of these are ignored for now because the data is not relevant 
@@ -112,12 +108,6 @@ def process_trk(string, filename):
         #So right now, it'll only undo the current track
         track = Track(track_id=id, filename=filename)
         db.session.add(track)
-        try:
-            db.session.commit()
-        except exc.IntegrityError:
-            db.session.rollback()
-            #print("Error: tried to add track with the id of an existing track")
-            continue 
 
         tracks.append(track)
 
@@ -135,21 +125,23 @@ def process_trkpt(string, tracks, filename):
     lines = string.split('\n')
     lines = removeEmptyFromList(lines)
 
+    max_progress = len(lines)-1
+
     if job:
-        broadcast_progress(job.get_id(), 0, len(lines)-1, filename)
+        broadcast_progress(job.get_id(), 0, max_progress, filename)
 
     #start at 1 to ignore the titles, which aren't data
     for i in range(1, len(lines)):
         if job:
-            broadcast_progress(job.get_id(), i, len(lines)-1, filename)
+            broadcast_progress(job.get_id(), i, max_progress, filename)
 
         #Split into attributes, which are separated by tabs
         attrs = lines[i].split('\t')
 
         timestamp = get_timestamp(attrs[5])
 
-        if TrackPoint.query.filter_by(timestamp=timestamp).first():
-            print("Error: tried to add track point with the id of an existing point: " + str(id))
+        if db.session.query(db.exists().where(TrackPoint.timestamp==timestamp)).scalar():
+            print("Error: tried to add track point with the id of an existing point: " + str(int(attrs[0])))
             continue
 
         #Read in attributes, order has to be hard-coded
@@ -158,6 +150,9 @@ def process_trkpt(string, tracks, filename):
         latitude = float(attrs[2])
         longitude = float(attrs[3])
 
+        if not id or not track_id or not latitude or not longitude:
+            raise TrackParseException('Error reading in point: one of the attributes was None')
+
         #Create the database TrackPoint object and add it to the database
         track = None
         for t in tracks:
@@ -165,9 +160,16 @@ def process_trkpt(string, tracks, filename):
                 track = t
                 break
 
+        if not track:
+            raise TrackParseException('One of the points had an invalid track id: ' + str(track_id))
+
         point = TrackPoint(track=track, latitude=latitude, longitude=longitude,
                 timestamp=timestamp)
         db.session.add(point)
-        db.session.commit()
 
         print("Created point with id " + str(id))
+
+
+
+class TrackParseException(Exception):
+    pass

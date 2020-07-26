@@ -1,7 +1,6 @@
-from cashmaps import app
 from cashmaps.map import map_bp
 from cashmaps.map.models import Track, TrackPoint
-from flask import jsonify
+from flask import jsonify, current_app
 
 @map_bp.route('/map/_get_data', methods=['POST'])
 def map_get_data():
@@ -11,5 +10,5 @@ def map_get_data():
 @map_bp.route('/map/_clear_data', methods=['POST'])
 def map_clear_data():
     Track.clear_tracks()
-    FlashMessage.create_message("Tracks Cleared", app.config['TASK_TYPE_MAP'])
+    FlashMessage.create_message("Tracks Cleared", current_app.config['TASK_TYPE_MAP'])
     return {}

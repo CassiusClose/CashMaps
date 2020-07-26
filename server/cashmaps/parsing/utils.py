@@ -1,5 +1,6 @@
-from cashmaps import app, socketio
+from cashmaps import socketio
 from cashmaps.utils import send_notification
+from flask import current_app
 
 def broadcast_start(job_id, filename):
     data = {
@@ -21,4 +22,4 @@ def broadcast_progress(job_id, progress, max_progress, filename):
 
 def broadcast_finished(job_id, filename):
     socketio.emit('parser_finish', {'job_id':job_id}, namespace='/parsers')
-    send_notification(app.config['TASK_TYPE_PARSE'], "Parse Complete: " + filename)
+    send_notification(current_app.config['TASK_TYPE_PARSE'], "Parse Complete: " + filename)

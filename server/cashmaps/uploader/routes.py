@@ -1,8 +1,8 @@
-from cashmaps import app, db
+from cashmaps import db
 #TODO is photo_uploader necessary?
 from cashmaps.uploader import uploader_bp, photo_uploader
 from cashmaps.uploader.models import Photo
-from flask import request
+from flask import request, current_app
 import os
 
 @uploader_bp.route('/_upload_photo', methods=['POST'])
@@ -24,7 +24,7 @@ def save_photo_to_system(f, filepath, overwrite):
     if(filepath.startswith('/')):
         filepath = filepath[1:]
     relativePath = os.path.join(filepath, f.filename)
-    fullpath = os.path.join(os.path.join(app.config['UPLOAD_FOLDER_PHOTOS'], relativePath))
+    fullpath = os.path.join(os.path.join(current_app.config['UPLOAD_FOLDER_PHOTOS'], relativePath))
 
     if Photo.get_photo_by_abs_filepath(fullpath) is not None:
         if overwrite == 'true':
