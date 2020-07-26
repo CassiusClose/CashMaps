@@ -1,0 +1,1 @@
+Hello there! This a set of sentences intented to test the parser. It will try to interpret this as a Garmin Homeport exported text file, and it will be sorely wrong.

@@ -1,22 +1,34 @@
 import pathlib
+import pytest
 import datetime
+import os
 
-from cashmaps import app, db
+from werkzeug.datastructures import FileStorage
+
+#from cashmaps import db
 from cashmaps.map.models import *
-from cashmaps.tests.fixtures import client
+from cashmaps.tests.fixtures import app, worker, database
 from cashmaps.parsing.parsers.homeport_parser import parse_homeport
+from cashmaps.parsing.routes import start_parse
+from flask import current_app
 
+
+def get_testfile_path(filename):
+    return pathlib.Path(__file__).parent.absolute() / 'testfiles' / filename
 
 
 class TestHomeportParser:
-    def test_standard_parse(self, client):
+    def test_standard_parse(self, app, database):
         """
         Test that parse_homeport will properly parse a well-formatted file exported from
         Garmin Homeport, and will create the proper amount of Tracks and Track Points that
         are linked together.
         """
-        filepath = pathlib.Path(__file__).parent.absolute() / 'testfiles' / 'standard.txt'
+        filepath = get_testfile_path('standard.txt')
+
+
         parse_homeport(filepath)
+        
 
         assert len(Track.query.all()) == 10
         assert len(TrackPoint.query.all()) == 100
@@ -69,27 +81,27 @@ class TestHomeportParser:
             assert t.points[0].longitude == longs[i]
 
 
-    def test_empty_parse(self, client):
+    def test_empty_parse(self, app, database):
         """
         Test that parse_homeport(), when given a file with no listed tracks or track points,
         will not fail and will not create any database models.
         """
-        filepath = pathlib.Path(__file__).parent.absolute() / 'testfiles' / 'empty.txt'
+        filepath = get_testfile_path('empty_data.txt')
         parse_homeport(filepath)
 
         assert len(Track.query.all()) == 0
         assert len(TrackPoint.query.all()) == 0
 
 
-    def test_empty_tracks_parse(self, client):
+    def test_empty_tracks_parse(self, app, database):
         """
         Test that parse_homeport(), when given a file where some tracks have no associated
         points, will only create the Track objects that have points associated with them.
         """
-        filepath = pathlib.Path(__file__).parent.absolute() / 'testfiles' / 'empty_tracks.txt'
+        filepath = get_testfile_path('empty_tracks.txt')
         parse_homeport(filepath)
 
-        assert len(Track.query.all()) == 1
+        assert Track.query.count() == 1
         assert Track.query[0].track_id == 1
 
         time1 = datetime.datetime(2014,8,12,12,54,11)
@@ -98,5 +110,47 @@ class TestHomeportParser:
         assert Track.query[0].points.first().timestamp == time1
         assert Track.query[0].points.order_by(TrackPoint.database_id.desc()).first().timestamp == time2
     
+
+    def _test_parse_task_error(self, app, database, worker, filename):
+        filepath = get_testfile_path(filename)
+        f = open(filepath)
+        file = FileStorage(stream=f) #simulate post request file object
+
+        job = start_parse(file)
+        worker.work(burst=True)
+
+        # No database objects should have been created
+        assert Track.query.count() == 0
+        assert TrackPoint.query.count() == 0
+
+        # The temp file should be gone, and it shouldn't change the original one.
+        assert not os.path.exists(os.path.join(current_app.config['UPLOAD_FOLDER_TEMP'],filename))
+        assert os.path.exists(filepath)
+
+
+    def test_parse_task_error_file_random_text(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'random_text.txt')
+
+    def test_parse_task_error_empty_file(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'empty_file.txt')
+
+    def test_parse_task_error_bad_lat_long(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'bad_lat_long.txt')
+
+    def test_parse_task_error_bad_track_id(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'bad_track_id.txt')
+
+    def test_parse_task_error_bad_point_track_id(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'bad_point_track_id.txt')
+
+    def test_parse_task_error_bad_timestamp(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'bad_timestamp.txt')
+
+    def test_parse_task_error_bad_tabs(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'bad_tabs.txt')
+
+    def test_parse_task_error_missing_sections(self, app, database, worker):
+        self._test_parse_task_error(app, database, worker, 'missing_sections.txt')
+
 
 
