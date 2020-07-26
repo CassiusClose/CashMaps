@@ -1,7 +1,6 @@
 import os
 
 from flask import Flask
-from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from rq import Queue
@@ -17,10 +16,11 @@ redis = Redis.from_url(os.environ.get('REDIS_URL') or 'redis://')
 queue = Queue('cashmaps', connection=redis)
 socketio = SocketIO()
 
-def create_app(test_config=None):
+
+def create_app(ConfigClass):
 
     app = Flask(__name__, template_folder='', static_folder='static/')
-    app.config.from_object(Config)
+    app.config.from_object(ConfigClass)
     app.debug = True
 
 

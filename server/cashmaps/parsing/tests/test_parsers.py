@@ -10,7 +10,6 @@ from cashmaps.map.models import *
 from cashmaps.tests.fixtures import app, worker, database
 from cashmaps.parsing.parsers.homeport_parser import parse_homeport
 from cashmaps.parsing.routes import start_parse
-from flask import current_app
 
 
 def get_testfile_path(filename):

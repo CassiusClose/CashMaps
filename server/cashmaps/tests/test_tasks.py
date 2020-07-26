@@ -7,11 +7,9 @@ import unittest
 from rq import SimpleWorker, get_current_job
 from rq.job import JobStatus
 
-from config import Config
 from cashmaps import db, queue
 from cashmaps.tests.fixtures import app, worker
 from cashmaps.tasks import start_task
-from flask import current_app
 
 
 def job_basic():
