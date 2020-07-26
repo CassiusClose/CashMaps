@@ -23,12 +23,6 @@ class DevConfig():
     UPLOAD_FOLDER_PHOTOS=os.path.join(basedir + "/cashmaps/static/photos/")
 
 
-    TASK_TYPE_PARSE = "parse"
-    TASK_TYPE_MAP = "map"
-    FLASH_TYPE_UPLOAD = "upload_flash"
-
-
-
 class TestConfig():
     basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -52,8 +46,3 @@ class TestConfig():
 
     # The port of the Pytest-Flask live server for Browser testing
     LIVESERVER_PORT = 5000
-
-
-    TASK_TYPE_PARSE = "parse"
-    TASK_TYPE_MAP = "map"
-    FLASH_TYPE_UPLOAD = "upload_flash"

@@ -123,7 +123,7 @@ class TestHomeportParser:
         assert TrackPoint.query.count() == 0
 
         # The temp file should be gone, and it shouldn't change the original one.
-        assert not os.path.exists(os.path.join(current_app.config['UPLOAD_FOLDER_TEMP'],filename))
+        assert not os.path.exists(os.path.join(app.config['UPLOAD_FOLDER_TEMP'],filename))
         assert os.path.exists(filepath)
 
 
