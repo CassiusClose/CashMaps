@@ -25,9 +25,7 @@ class TestHomeportParser:
         """
         filepath = get_testfile_path('standard.txt')
 
-
         parse_homeport(filepath)
-        
 
         assert len(Track.query.all()) == 10
         assert len(TrackPoint.query.all()) == 100

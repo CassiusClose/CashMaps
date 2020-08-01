@@ -12,6 +12,7 @@ from cashmaps.tests.fixtures import app, worker
 from cashmaps.tasks import start_task
 
 
+
 def job_basic():
     return 'hi'
 
@@ -54,18 +55,21 @@ def exception_callback_args(job, exc_type, exc_value, traceback, a, b):
 
 
 class TestStartTask:
-    def test_job_runs(self, app, worker):
+    """
+    Tests all aspects of the start_task() function in cashmaps/tasks.py, which creates an RQ worker
+    """
+    def test_job_runs(self, worker):
         """
         Test that a basic job function will complete when started with start_task(). Tests
         completion by reading the job's return value.
         """
         job = start_task(job_basic)
         worker.work(burst=True)
-        
+       
         assert job.result == 'hi'
 
 
-    def test_job_args(self, app, worker):
+    def test_job_args(self, worker):
         """
         Test that a job function recieves its arguments properly when started with start_task().
         Tests completion by reading the job's return value.
@@ -76,7 +80,7 @@ class TestStartTask:
         assert job.result == 8
 
 
-    def test_job_timeout(self, app, worker):
+    def test_job_timeout(self, worker):
         """
         Tests that a job started with start_task() will timeout after the timeout value passed
         to start_task().
@@ -88,7 +92,7 @@ class TestStartTask:
         assert job.get_status() == JobStatus.FAILED
 
 
-    def test_job_receives_meta(self, app, worker):
+    def test_job_receives_meta(self, worker):
         """
         Test that metadata passed to start_task() will be accessible within the job function.
         """
@@ -98,7 +102,7 @@ class TestStartTask:
         assert job.result == 'hi there'
 
 
-    def test_job_sends_meta(self, app, worker):
+    def test_job_sends_meta(self, worker):
         """
         Test that metadata set within a job will be available outside of the job.
         Make sure to call job.refresh(), which will pull any updates in meta.
@@ -111,7 +115,7 @@ class TestStartTask:
         assert job.meta.get('test') == 'hi'
 
     
-    def test_job_callback_no_args(self, app, worker, capfd):
+    def test_job_callback_no_args(self, worker, capfd):
         """
         Test that a job started by start_task() will call the provided callback
         function when the job completes. Here, test a callback function that
@@ -125,7 +129,7 @@ class TestStartTask:
         assert job.result == 'hi'
 
 
-    def test_job_callback_args(self, app, worker, capfd):
+    def test_job_callback_args(self, worker, capfd):
         """
         Test that a job started by start_task() will call the provided callback
         function when the job completes. Here, test a callback function that
@@ -139,11 +143,11 @@ class TestStartTask:
         assert job.result == 'hi'
 
 
-    def test_job_exception_callback_print_exc_message(self, app, worker, capfd):
+    def test_job_exception_callback_print_exc_message(self, worker, capfd):
         """
-        If an exception callback function is passed to start_task(), then the function
-        should be called if an exception is raised in the job. It should be given information
-        about the exception (type, message, traceback).
+        If an exception callback function is passed to start_task(), then the
+        function should be called if an exception is raised in the job. It
+        should be given information about the exception (type, message, traceback).
         """
         job = start_task(job_exception, exc_callback=exception_callback_print_value)
         worker.work(burst=True)
@@ -152,11 +156,12 @@ class TestStartTask:
         assert out == "<class 'Exception'>\nThis is an error.\n"
 
 
-    def test_job_exception_callback_print_meta(self, app, worker, capfd):
+    def test_job_exception_callback_print_meta(self, worker, capfd):
         """
-        If an exception callback function is passed to start_task(), then the function should
-        be called if an exception is raised in the job. It should be given the instance of the
-        job that caused the exception, and thus be able to access that job's metadata.
+        If an exception callback function is passed to start_task(), then the
+        function should be called if an exception is raised in the job. It
+        should be given the instance of the job that caused the exception, and
+        thus be able to access that job's metadata.
         """
         job = start_task(job_exception, metadata={'test':'hello'},
                 exc_callback=exception_callback_print_meta)
@@ -166,12 +171,12 @@ class TestStartTask:
         assert out == 'hello\n'
 
 
-    def test_job_exception_callback_args(self, app, worker, capfd):
+    def test_job_exception_callback_args(self, worker, capfd):
         """
-        If an exception callback function is passed to start_task(), then the function should
-        be called if an exception is raised in the job. start_task() should accept additional
-        arguments (apart from the job and exception data) and pass them along to the callback
-        function.
+        If an exception callback function is passed to start_task(), then the
+        function should be called if an exception is raised in the job.
+        start_task() should accept additional arguments (apart from the job
+        and exception data) and pass them along to the callback function.
         """
         job = start_task(job_exception, exc_callback=exception_callback_args,
                 exc_callback_args=[3, 8])

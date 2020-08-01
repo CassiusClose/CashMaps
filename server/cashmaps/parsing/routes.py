@@ -11,6 +11,10 @@ from cashmaps.parsing.parsers.homeport_parser import parse_homeport
 from cashmaps.parsing.utils import broadcast_start, broadcast_finished
 
 
+@parsing_bp.route('/test')
+def parser_text():
+    return {}
+
 @parsing_bp.route('/parser/_start_parse', methods=['POST'])
 def parser_start_parse():
     """Begins a parse with the request's attached files."""
@@ -28,11 +32,15 @@ def parser_start_parse():
 def start_parse(file):
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER_TEMP'], os.path.basename(file.filename))
 
-    dest_file = open(filepath, 'w')
-    file.save(dest_file)
+    if current_app.config['TESTING'] == True:
+        dest_file = open(filepath, 'w')
+        file.save(dest_file)
 
-    file.close()
-    dest_file.close()
+        file.close()
+        dest_file.close()
+    else:
+        file.save(filepath)
+        file.close()
 
 
     job = start_task(

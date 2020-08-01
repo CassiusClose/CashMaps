@@ -10,7 +10,7 @@ from flask_socketio import emit
 def index():
     return render_template('static/index.html')
 
-@current_app.route('/')
+@current_app.route('/parser')
 def parser():
     return render_template('static/index.html')
 

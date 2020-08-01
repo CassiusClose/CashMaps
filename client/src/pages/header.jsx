@@ -15,10 +15,10 @@ export default function Header(props) {
   return(
     <div className="Header_Container">
       <div className="Header_Links">
-        <button onClick={() => redirect('/')}>About</button>
-        <button onClick={() => redirect('/parser')}>Parsers</button>
-        <button onClick={() => redirect('/map')}>Map</button>
-        <button onClick={() => redirect('/tools')}>Tools</button>
+        <button name="about" onClick={() => redirect('/')}>About</button>
+        <button name="parser" onClick={() => redirect('/parser')}>Parsers</button>
+        <button name="map" onClick={() => redirect('/map')}>Map</button>
+        <button name="tools" onClick={() => redirect('/tools')}>Tools</button>
       </div>
       <hr/>
     </div>

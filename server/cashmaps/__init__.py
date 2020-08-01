@@ -38,7 +38,7 @@ def create_app(ConfigClass):
 
 
         socketio.init_app(app, message_queue=app.config['REDIS_URL'])
-
+        
 
         from cashmaps.parsing import parsing_bp
         app.register_blueprint(parsing_bp)
@@ -50,5 +50,6 @@ def create_app(ConfigClass):
         app.register_blueprint(uploader_bp)
 
         from cashmaps import routes, models
+
 
         return app

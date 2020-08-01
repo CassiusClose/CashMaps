@@ -9,7 +9,7 @@ class DevConfig():
     os.environ['PYTHONUNBUFFERED'] = "TRUE"
 
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'cash_MapS_Key_Babyy'
-
+    
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir + '/cashmaps/static/resources/database.db')
 
     #Turns off notifications when the database is updated
@@ -31,6 +31,10 @@ class TestConfig():
     os.environ['PYTHONUNBUFFERED'] = "TRUE"
 
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'cash_MapS_Key_Babyy'
+   
+
+    TESTING = True
+    WTF_CSRF_ENABLED = False
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir + '/cashmaps/static/resources/test_db.db')
 

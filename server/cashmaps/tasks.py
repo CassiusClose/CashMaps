@@ -100,22 +100,16 @@ def go(func, args, callback, callback_args):
 
     # Stole this from Flask-RQ2. It works, but I'm not sure why yet.
     # https://github.com/rq/Flask-RQ2/blob/master/src/flask_rq2/job.py
-    if current_app:
-        app = current_app
-    else:
-        app = ScriptInfo().load_app()
-        
-    with app.app_context():
-        job = get_current_job()
-        job.refresh() # Fetch meta data set in start_task()
+    job = get_current_job()
+    job.refresh() # Fetch meta data set in start_task()
 
-        # Call the actual job function
-        return_val = func(*args)
+    # Call the actual job function
+    return_val = func(*args)
 
-        if callback:
-            callback(*callback_args)
+    if callback:
+        callback(*callback_args)
 
-        return return_val
+    return return_val
 
 
 
