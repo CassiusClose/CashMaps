@@ -1,4 +1,4 @@
-from cashmaps import db, queue, create_app
+from cashmaps import db, queue
 from cashmaps.utils import send_notification
 from flask import current_app
 from rq import get_current_job
@@ -7,8 +7,6 @@ from flask.cli import ScriptInfo
 import os
 import logging
 
-#app = create_app()
-#app.app_context().push()
 
 def start_task(func, args=[], metadata={}, timeout=720, callback=None, callback_args=[], exc_callback=None, exc_callback_args=[]):
     """
@@ -100,16 +98,24 @@ def go(func, args, callback, callback_args):
 
     # Stole this from Flask-RQ2. It works, but I'm not sure why yet.
     # https://github.com/rq/Flask-RQ2/blob/master/src/flask_rq2/job.py
-    job = get_current_job()
-    job.refresh() # Fetch meta data set in start_task()
 
-    # Call the actual job function
-    return_val = func(*args)
+    if current_app:
+        app = current_app
+    else:
+        app = ScriptInfo().load_app()
 
-    if callback:
-        callback(*callback_args)
+    with app.app_context():
 
-    return return_val
+        job = get_current_job()
+        job.refresh() # Fetch meta data set in start_task()
+
+        # Call the actual job function
+        return_val = func(*args)
+
+        if callback:
+            callback(*callback_args)
+
+        return return_val
 
 
 

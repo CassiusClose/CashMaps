@@ -8,7 +8,7 @@ from cashmaps import db, queue
 from cashmaps.tasks import start_task
 from cashmaps.parsing import parsing_bp
 from cashmaps.parsing.parsers.homeport_parser import parse_homeport
-from cashmaps.parsing.utils import broadcast_start, broadcast_finished
+from cashmaps.parsing.utils import broadcast_start, broadcast_finished, broadcast_error
 
 
 @parsing_bp.route('/test')
@@ -29,10 +29,10 @@ def parser_start_parse():
     return {'success': True}
 
 
-def start_parse(file):
+def start_parse(file, weird=False):
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER_TEMP'], os.path.basename(file.filename))
 
-    if current_app.config['TESTING'] == True:
+    if weird:
         dest_file = open(filepath, 'w')
         file.save(dest_file)
 
@@ -46,9 +46,7 @@ def start_parse(file):
     job = start_task(
             func = parse_homeport,
             args = [filepath],
-            metadata = {'filepath':filepath},
-            callback = parse_callback,
-            callback_args = [filepath],
+            metadata = {'filepath':filepath}, callback = parse_callback, callback_args = [filepath],
             exc_callback = parse_exc_callback,
             exc_callback_args = [filepath]
     )
@@ -62,7 +60,6 @@ def parse_callback(filepath):
     job = get_current_job()
 
     broadcast_finished(job.get_id(), os.path.basename(filepath))
-    print(db.session.new)
 
     os.remove(filepath)
     
@@ -70,6 +67,8 @@ def parse_callback(filepath):
 def parse_exc_callback(job, exc_type, exc_message, traceback, filepath):
     print(db.session.new)
     db.session.rollback()
+
+    broadcast_error(job.get_id(), os.path.basename(filepath))
 
     os.remove(filepath)
 

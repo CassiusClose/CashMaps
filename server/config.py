@@ -21,6 +21,7 @@ class DevConfig():
 
     UPLOAD_FOLDER_TEMP=os.path.join(basedir +  "/cashmaps/static/resources/temp/")
     UPLOAD_FOLDER_PHOTOS=os.path.join(basedir + "/cashmaps/static/photos/")
+    TASK_TYPE_PARSE='parse'
 
 
 class TestConfig():
@@ -47,6 +48,7 @@ class TestConfig():
 
     UPLOAD_FOLDER_TEMP=os.path.join(basedir +  "/cashmaps/static/resources/temp/")
     UPLOAD_FOLDER_PHOTOS=os.path.join(basedir + "/cashmaps/static/photos/")
+    TASK_TYPE_PARSE='parse'
 
     # The port of the Pytest-Flask live server for Browser testing
     LIVESERVER_PORT = 5000

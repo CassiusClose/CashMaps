@@ -18,7 +18,6 @@ socketio = SocketIO()
 
 
 def create_app(ConfigClass):
-
     app = Flask(__name__, template_folder='', static_folder='static/')
     app.config.from_object(ConfigClass)
     app.debug = True
@@ -37,7 +36,10 @@ def create_app(ConfigClass):
         migrate.init_app(app, db)
 
 
-        socketio.init_app(app, message_queue=app.config['REDIS_URL'])
+        if app.config.get('TESTING'):
+            socketio.init_app(app)
+        else:
+            socketio.init_app(app, message_queue=app.config['REDIS_URL'])
         
 
         from cashmaps.parsing import parsing_bp
