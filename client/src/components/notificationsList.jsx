@@ -17,7 +17,7 @@ export default function NotificationsList(props) {
       <ul>
         { messages != null &&
           messages.map((item) => (
-            <li key={item.timestamp}>{item.message}</li>
+            <li className='Notification' key={item.timestamp}>{item.message}</li>
           ))
         }
       </ul>
