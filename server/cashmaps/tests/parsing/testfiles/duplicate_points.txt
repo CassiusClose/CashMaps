@@ -1,0 +1,93 @@
+﻿
+metadata
+ID	name	desc	time	keywords	minlat	minlon	maxlat	maxlon	
+1			2019-07-28T03:24:29Z		22.320460556074977	-74.970974111929536	23.646982312202454	-72.983665438368917	
+
+author
+ID	name	email	
+
+copyright
+year	license	author	
+
+link
+metadataID	authorID	wptID	rteptID	trkptID	rteID	trkID	text	type	href	
+1							"Garmin International"		http://www.garmin.com	
+
+rte
+ID	name	cmt	desc	src	number	type	IsAutoNamed	DisplayColor	TransportationMode	
+
+rtept
+ID	rteID	lat	lon	ele	time	magvar	geoidheight	name	cmt	desc	src	sym	type	fix	sat	hdop	vdop	pdop	ageofdgpsdata	dgpsid	DepartureTime	StopDuration	ArrivalTime	CalculationMode	ElevationMode	NamedRoad_Name	NamedRoad_Id	NamedRoad_ProductId	
+
+wpt
+ID	lat	lon	ele	time	magvar	geoidheight	name	cmt	desc	src	sym	type	fix	sat	hdop	vdop	pdop	ageofdgpsdata	dgpsid	Proximity	Temperature	Depth	DisplayMode	Samples	Expiration	
+1	22.360695786774158	-72.984046395868063		2014-08-17T15:23:31Z			"0016"				"Waypoint"	"user"											SymbolAndName			
+2	22.735058069229126	-73.886453490704298		2014-08-13T14:41:48Z			"ACK HBR"				"Waypoint"	"user"											SymbolAndName			
+3	22.400915259495378	-73.146437471732497		2014-08-14T20:55:11Z			"BTSYBY ANC"				"Waypoint"	"user"											SymbolAndName			
+4	23.646982312202454	-74.970974111929536		2014-08-05T14:58:30Z			"RUM SW"				"Waypoint"	"user"											SymbolAndName			
+
+Address
+wptID	StreetAddress1	StreetAddress2	City	State	Country	PostalCode	
+
+PhoneNumber
+wptID	Category	value	
+
+Categories
+wptID	Category	
+1	"Main.2014-08-15.Rum-Mayaguana.ADM"	
+2	"Main.2014-08-15.Rum-Mayaguana.ADM"	
+3	"Main.2014-08-15.Rum-Mayaguana.ADM"	
+3	"Main.2014-08-20.Maya-Provo.ADM"	
+3	"Main.2014-09-01.Provo-BigSand.ADM"	
+3	"Main.2014-09-07.BigSand-Luperon.ADM"	
+3	"Main.2014-11-15.Luperon-Boqueron.ADM"	
+3	"Main.2014-11-23.Boqueron-CaboRojo.ADM"	
+3	"Main.2014-11-24.CaboRojo-Gilligan's.ADM"	
+3	"Main.2014-11-27.Gilligan's-Caha.ADM"	
+3	"Main.2014-11-29.Caha-Salinas.ADM"	
+3	"Main.2014-12-20.Salinas-PPatillas.ADM"	
+3	"Main.2015-01-07.Culebra-Culebrita.ADM"	
+3	"Main.2015-01-09.Culebrita-Water Island.ADM"	
+3	"Main.2015-01-22.Water Island-Little Lameshur Bay.ADM"	
+4	"Main.2014-08-15.Rum-Mayaguana.ADM"	
+
+trk
+ID	name	cmt	desc	src	number	type	DisplayColor	
+1	"ACTIVE LOG"						"Red"	
+2	"ACTIVE LOG 001"						"Red"	
+3	"ACTIVE LOG 002"						"Red"	
+4	"ACTIVE LOG 003"						"Red"	
+5	"ACTIVE LOG 004"						"Red"	
+6	"ACTIVE LOG 005"						"Red"	
+7	"ACTIVE LOG 006"						"Red"	
+8	"ACTIVE LOG 007"						"Red"	
+9	"ACTIVE LOG 008"						"Red"	
+10	"ACTIVE LOG 009"						"Red"	
+
+trkseg
+ID	trkID	
+1	1	
+2	2	
+3	3	
+4	4	
+5	5	
+6	6	
+7	7	
+8	8	
+9	9	
+10	10	
+
+trkpt
+ID	trksegID	lat	lon	ele	time	magvar	geoidheight	name	cmt	desc	src	sym	type	fix	sat	hdop	vdop	pdop	ageofdgpsdata	dgpsid	Temperature	Depth	wtemp	hr	cad	
+1	1	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+2	1	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+3	1	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+4	1	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+5	1	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+6	2	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+7	2	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+8	2	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+9	3	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+10	3	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+11	4	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					
+12	5	23.613482778891921	-74.844902576878667		2014-08-12T12:54:11Z																					

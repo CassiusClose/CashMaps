@@ -31,10 +31,10 @@ class TestHomeportParser:
 
         parse_homeport(filepath)
 
-        assert len(Track.query.all()) == 10
-        assert len(TrackPoint.query.all()) == 100
+        assert Track.query.count() == 10
+        assert TrackPoint.query.count() == 100
         for t in Track.query.all():
-            assert len(t.points.all()) == 10
+            assert t.points.count() == 10
 
         timestamps = [
             datetime.datetime(2014,8,12,12,54,11),
@@ -75,11 +75,23 @@ class TestHomeportParser:
             -74.832410523667932,
         ]
 
-        for i in range(0, len(Track.query.all())):
+        for i in range(0, Track.query.count()):
             t = Track.query[i]
             assert t.points[0].timestamp == timestamps[i]
             assert t.points[0].latitude == lats[i]
             assert t.points[0].longitude == longs[i]
+
+
+    def test_same_points(self, app, database):
+        """
+        Test that parse_homeport() will not create multiple identical points, i.e. will
+        skip any duplicate points.
+        """
+        filepath = get_testfile_path('duplicate_points.txt')
+        parse_homeport(filepath)
+
+        assert Track.query.count() == 1
+        assert TrackPoint.query.count() == 1
 
 
     def test_empty_parse(self, app, database):
@@ -90,8 +102,8 @@ class TestHomeportParser:
         filepath = get_testfile_path('empty_data.txt')
         parse_homeport(filepath)
 
-        assert len(Track.query.all()) == 0
-        assert len(TrackPoint.query.all()) == 0
+        assert Track.query.count() == 0
+        assert TrackPoint.query.count() == 0
 
 
     def test_empty_tracks_parse(self, app, database):

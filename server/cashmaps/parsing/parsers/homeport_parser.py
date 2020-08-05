@@ -73,16 +73,18 @@ def parse_homeport(filepath):
     # If any of the tracks created above have no points in them, they are either empty
     # or redundant, so delete them
     for t in track_objects:
-        if(len(Track.query.get(t.database_id).points.all()) == 0):
+        if(Track.query.get(t.database_id).points.count() == 0):
             db.session.delete(Track.query.get(t.database_id))
 
 
     f.close()
+
+    # Only commit at the very end, so that if an error happens, the error handler
+    # (function in cashmaps.parsing.routes) will rollback the session so no
+    # changes are made
     db.session.commit()
 
 
-#-Functions to process each category
-#Most of these are ignored for now because the data is not relevant 
 
 def process_trk(string, filename):
     """Initializes the file's tracks"""
@@ -117,14 +119,14 @@ def process_trk(string, filename):
 def process_trkpt(string, tracks, filename):
     """Initializes track points from the file and adds them to the database"""
 
-    job = get_current_job()
 
     #split into lines and remove empty ones
     lines = string.split('\n')
     lines = removeEmptyFromList(lines)
 
-    max_progress = len(lines)-1
 
+    max_progress = len(lines)-1
+    job = get_current_job()
     if job:
         broadcast_progress(job.get_id(), 0, max_progress, filename)
 
