@@ -29,7 +29,7 @@ module.exports = (env, argv) => {
       ]
     },
     resolve: {
-      extensions: ['.css', '.js', '.jsx'],
+      extensions: ['*', '.js', '.jsx'],
     },
     plugins: [
       new Webpack.DefinePlugin({
