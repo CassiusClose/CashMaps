@@ -14,7 +14,7 @@ class Track(db.Model):
     filename = db.Column(db.String(60))
 
     #Relates this track to its list of points
-    points = db.relationship('TrackPoint', backref='track', lazy='dynamic')
+    points = db.relationship('TrackPoint', cascade="all, delete", backref='track', lazy='dynamic')
 
     def to_dict(self):
         """Returns a dictionary representation of this object to be used as JSON."""
