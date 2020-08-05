@@ -121,7 +121,7 @@ class TestHomeportParser:
         time2 = datetime.datetime(2014,8,12,13,10,44)
 
         assert Track.query[0].points.first().timestamp == time1
-        assert Track.query[0].points.order_by(TrackPoint.database_id.desc()).first().timestamp == time2
+        assert Track.query[0].points.order_by(TrackPoint.id.desc()).first().timestamp == time2
     
 
 class TestHomeportParserAsTask:

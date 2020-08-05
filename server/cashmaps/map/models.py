@@ -7,7 +7,7 @@ from cashmaps.models import results_to_arr
 class Track(db.Model):
     """A database model that stores a track, which is a collection of points"""
 
-    database_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
 
     #The track ID as marked in the file, which means often 1-10. This will be redundant across tracks.
     track_id = db.Column(db.Integer)
@@ -16,29 +16,46 @@ class Track(db.Model):
     #Relates this track to its list of points
     points = db.relationship('TrackPoint', cascade="all, delete", backref='track', lazy='dynamic')
 
-    def to_dict(self):
-        """Returns a dictionary representation of this object to be used as JSON."""
+    def json(self):
+        """
+        Returns JSON containing the track's data, including all of its points, to be sent
+        to the client.
+        """
         points = self.points.order_by(TrackPoint.timestamp)
-        data = {'database_id':self.database_id, 'track_id':self.track_id, 'points':results_to_arr(points)}
+        data = {
+            'id':self.id,
+            'points': [p.json() for p in points]
+        }
         return data
 
-    def get_tracks():
-        """Returns all the tracks as a dictionary, to be sent as JSON."""
+
+    def get_all_tracks_as_json():
+        """
+        Returns a list of all tracks, formatted as JSON.
+        """
         tracks = Track.query.all()
-        return {'tracks': results_to_arr(tracks)}
+        return [t.json() for t in tracks]
+
 
 class TrackPoint(db.Model):
     """A database model that stores points on a map, in lat & long, that form tracks"""
 
-    database_id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
 
     latitude = db.Column(db.Float)
     longitude = db.Column(db.Float)
     timestamp = db.Column(db.DateTime, unique=True, index=True)
 
     #Links this point to its track
-    track_id = db.Column(db.Integer, db.ForeignKey('track.database_id'))
+    track_id = db.Column(db.Integer, db.ForeignKey('track.id'))
 
-    def to_dict(self):
-        """Returns a dictionary representation of this object to be used as JSON."""
-        return {'latitude':self.latitude, 'longitude':self.longitude, 'timestamp':self.timestamp, 'track_id':self.track_id}
+    def json(self):
+        """
+        Returns JSON containing the point's data to be sent to the client.
+        """
+        return {
+            'id': self.id,
+            'latitude':self.latitude,
+            'longitude':self.longitude,
+            'timestamp':self.timestamp,
+        }

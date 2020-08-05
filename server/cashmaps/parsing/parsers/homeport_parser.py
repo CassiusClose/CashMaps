@@ -73,8 +73,8 @@ def parse_homeport(filepath):
     # If any of the tracks created above have no points in them, they are either empty
     # or redundant, so delete them
     for t in track_objects:
-        if(Track.query.get(t.database_id).points.count() == 0):
-            db.session.delete(Track.query.get(t.database_id))
+        if(Track.query.get(t.id).points.count() == 0):
+            db.session.delete(Track.query.get(t.id))
 
 
     f.close()
