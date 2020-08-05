@@ -1,5 +1,4 @@
 from cashmaps import db, queue
-from cashmaps.utils import send_notification
 from flask import current_app
 from rq import get_current_job
 from rq.timeouts import JobTimeoutException

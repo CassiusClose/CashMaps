@@ -38,19 +38,6 @@ def tools():
 
 
 
-
-@socketio.on('connect', namespace='/test')
-def test_connect():
-    emit('message', {'data': 'Connected'})
-
-@socketio.on('disconnect', namespace='/test')
-def test_disconnect():
-    print('Client disconnected')
-
-@socketio.on('send_message')
-def test_receive_message(data):
-    emit('message', {'message': 'received at ' + str(data['timestamp'])})
-
 @current_app.route('/_clear_rq', methods=['POST'])
 def clear_rq():
     queue.empty()

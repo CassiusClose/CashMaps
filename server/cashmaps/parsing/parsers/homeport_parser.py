@@ -10,8 +10,6 @@ from rq import get_current_job
 
 from cashmaps import db
 from cashmaps.map.models import Track, TrackPoint
-from cashmaps import socketio
-from cashmaps.utils import send_notification
 from cashmaps.parsing.utils import *
 
 

@@ -150,7 +150,7 @@ class TestHomeportParserAsTask:
         assert TrackPoint.query.count() == 100
 
         # The temp file should be gone, and it shouldn't change the original one.
-        assert not os.path.exists(os.path.join(app.config['UPLOAD_FOLDER_TEMP'],'standard.txt'))
+        assert not os.path.exists(os.path.join(app.config['UPLOAD_FOLDER_TEMP'],parse_filename))
         assert os.path.exists(filepath)
 
         # Get all socket messages that were sent
@@ -159,18 +159,19 @@ class TestHomeportParserAsTask:
         # Ensure the message from the parser beginning was sent
         assert received_messages[0]['name'] == 'parser_start'
         assert received_messages[0]['args'][0]['job_id'] == job.id
-        assert received_messages[0]['args'][0]['filename'] == 'standard.txt'
+        assert received_messages[0]['args'][0]['filename'] == parse_filename
 
         # Ensure the message from the parser finishing was sent 
         assert received_messages[-1]['name'] == 'parser_finish'
         assert received_messages[-1]['args'][0]['job_id'] == job.id
+        assert received_messages[-1]['args'][0]['filename'] == parse_filename
 
         # Ensure the progress messages were sent
         for i in range(1, len(received_messages)-2):
             m = received_messages[i]
             assert m['name'] == 'parser_update'
             assert m['args'][0]['job_id'] == job.id
-            assert m['args'][0]['filename'] == 'standard.txt'
+            assert m['args'][0]['filename'] == parse_filename
             assert m['args'][0]['max_progress'] == 100
             assert m['args'][0]['progress'] == i-1
 
@@ -217,6 +218,7 @@ class TestHomeportParserAsTask:
         # Ensure the parser failure message was sent
         assert received_messages[-1]['name'] == 'parser_error'
         assert received_messages[-1]['args'][0]['job_id'] == job.id
+        assert received_messages[-1]['args'][0]['filename'] == filename 
 
         # Ensure the parser progerss messages were sent
         for i in range(1, len(received_messages)-2):

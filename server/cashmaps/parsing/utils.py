@@ -1,5 +1,4 @@
 from cashmaps import socketio
-from cashmaps.utils import send_notification
 from flask import current_app
 
 socket = None
@@ -25,10 +24,16 @@ def broadcast_progress(job_id, progress, max_progress, filename):
 
 
 def broadcast_error(job_id, filename):
-    socketio.emit('parser_error', {'job_id':job_id}, namespace='/parsers')
-    send_notification(current_app.config['TASK_TYPE_PARSE'], "Parser failed: " + filename)
+    data = {
+        'job_id': job_id,
+        'filename': filename
+    }
+    socketio.emit('parser_error', data, namespace='/parsers')
 
 
 def broadcast_finished(job_id, filename):
-    socketio.emit('parser_finish', {'job_id':job_id}, namespace='/parsers')
-    send_notification(current_app.config['TASK_TYPE_PARSE'], "Parse Complete: " + filename)
+    data = {
+        'job_id': job_id,
+        'filename': filename
+    }
+    socketio.emit('parser_finish', data, namespace='/parsers')

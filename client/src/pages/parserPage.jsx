@@ -8,6 +8,7 @@ import { socket_parsers } from './../sockets';
 export default function parserPage(props) {
   const [files, setFiles] = useState([]);
   const [activeParsers, setActiveParsers] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   const [counter, setCounter] = useState(1);
   const refParsers = useRef(activeParsers);
 
@@ -32,8 +33,21 @@ export default function parserPage(props) {
 
     socket_parsers.on('parser_finish', (data) => {
       removeParser(data['job_id']);
+      var notification = {
+        key: data['job_id'],
+        message: "Parse of file " + data['filename'] + " has been completed."
+      };
+      setNotifications(notifications => [...notifications, notification]);
     });
 
+    socket_parsers.on('parser_error', (data) => {
+      removeParser(data['job_id']);
+      var notification = {
+        key: data['job_id'],
+        message: "Parse of file " + data['filename'] + " has failed."
+      };
+      setNotifications(notifications => [...notifications, notification]);
+    });
   },[]);
 
   const updateParser = (data) => {
@@ -68,7 +82,7 @@ export default function parserPage(props) {
   }
 
   const startParse = (files) => {
-    const data = new FormData(); //Form data is the only way to upload files to flask
+    const data = new FormData(); //form data is the only way to upload files to flask
     for(var i = 0; i < files.length; i++) {
       data.append(i, files[i]);
     }
@@ -105,8 +119,17 @@ export default function parserPage(props) {
           }
         </div>
       </div>
-      
-      <NotificationsList notification_name="parse"/>
+
+      <div>
+          <h2>Notifications</h2>
+          <ul>
+            { notifications != null &&
+              notifications.map((item) => (
+                <li className='Notification' key={item.key}>{item.message}</li>
+              ))
+            }
+          </ul>
+      </div>
     </div>
   );
 }
