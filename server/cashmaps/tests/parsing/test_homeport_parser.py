@@ -135,14 +135,15 @@ class TestHomeportParserAsTask:
         # Open the file to be parsed
         parse_filename = 'standard.txt'
         filepath = get_testfile_path(parse_filename)
-        f = open(filepath)
-        file = FileStorage(stream=f) #simulate post request file object
+        f = open(filepath, 'rb')
+        #file = FileStorage(filename=filepath) #simulate post request file object
+        file = FileStorage(stream=f)
 
         # Connect to the socket
         socketio_client.connect(namespace='/parsers')
 
         # Do the parse
-        job = start_parse(file, weird=True)
+        job = start_parse(file)
         worker.work(burst=True)
 
         # No database objects should have been created
@@ -188,14 +189,14 @@ class TestHomeportParserAsTask:
         """
         # Load the file to be parsed in a file object
         filepath = get_testfile_path(filename)
-        f = open(filepath)
+        f = open(filepath, 'rb')
         file = FileStorage(stream=f) #simulate post request file object
 
         # Connect to the socket
         socketio_client.connect(namespace='/parsers')
 
         # Do the parse
-        job = start_parse(file, weird=True)
+        job = start_parse(file)
         worker.work(burst=True)
 
         # No database objects should have been created

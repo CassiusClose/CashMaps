@@ -29,19 +29,11 @@ def parser_start_parse():
     return {'success': True}
 
 
-def start_parse(file, weird=False):
+def start_parse(file):
     filepath = os.path.join(current_app.config['UPLOAD_FOLDER_TEMP'], os.path.basename(file.filename))
 
-    if weird:
-        dest_file = open(filepath, 'w')
-        file.save(dest_file)
-
-        file.close()
-        dest_file.close()
-    else:
-        file.save(filepath)
-        file.close()
-
+    file.save(filepath)
+    file.close()
 
     job = start_task(
             func = parse_homeport,
