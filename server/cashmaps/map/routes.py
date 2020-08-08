@@ -6,8 +6,8 @@ from flask import jsonify, current_app
 @map_bp.route('/map/_get_data', methods=['POST'])
 def map_get_data():
     """Returns track data for the Cesium widget to display"""
-    return Track.get_tracks()
-
+    tracks = Track.get_all_tracks_as_json()
+    return {'tracks': tracks}
 
 @map_bp.route('/map/_clear_data', methods=['POST'])
 def map_clear_data():

@@ -57,7 +57,7 @@ export default function CesiumMap(props) {
           <LoadingTextAnim/>
       }
       { !isLoading &&
-        <Viewer>
+        <Viewer id="cesiumMap">
           <Entity>
             <PolylineCollection>
               {

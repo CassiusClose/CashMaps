@@ -1,7 +1,8 @@
 import datetime
+import json
 
 from cashmaps.map.models import *
-from cashmaps.tests.fixtures import app, worker, browser
+from cashmaps.tests.fixtures import app, worker, browser, database
 
 class TestPostCalls:
     """
@@ -40,6 +41,6 @@ class TestPostCalls:
 
         results = client.post('/map/_get_data')
 
-        json = Track.get_tracks()
+        dictionary = {'tracks': Track.get_all_tracks_as_json()}
 
-        assert results.data == json
+        assert json.loads(results.data.decode()) == dictionary

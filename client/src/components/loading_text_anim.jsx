@@ -23,7 +23,7 @@ export default function LoadingTextAnim(props) {
   });
 
   return(
-    <h1>
+    <h1 id="LoadingText">
       {text}
     </h1>
   );

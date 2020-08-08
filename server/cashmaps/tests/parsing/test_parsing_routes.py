@@ -9,13 +9,13 @@ class TestPostCalls:
     Tests misc POST routes that let the client perform certain tasks.
     """
 
-    def test_rq_clear(self, app):
+    def test_start_parse(self, app, client):
         """
         '/_rq_clear' clears the Redis Queue, used to clear up stale RQ jobs generated
         in developments.
         """
         queue.empty()
-        client = app.test_client()
+        #client = app.test_client()
 
         f1path = get_testfile_path('standard.txt')
         f1 = open(f1path, 'rb')
@@ -29,7 +29,8 @@ class TestPostCalls:
             'files': [f1, f2]
         }
 
-        client.post('/parser/_start_parse', data=data, content_type='multipart/form-data')
+        client.post('/parser/_start_parse', data={'0': f1, '1': f2})
 
         assert len(queue.jobs) == 2
+        queue.empty()
 
