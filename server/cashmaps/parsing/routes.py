@@ -11,10 +11,6 @@ from cashmaps.parsing.parsers.homeport_parser import parse_homeport
 from cashmaps.parsing.utils import broadcast_start, broadcast_finished, broadcast_error
 
 
-@parsing_bp.route('/test')
-def parser_text():
-    return {}
-
 @parsing_bp.route('/parser/_start_parse', methods=['POST'])
 def parser_start_parse():
     """Begins a parse with the request's attached files."""

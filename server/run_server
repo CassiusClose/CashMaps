@@ -4,5 +4,5 @@ export FLASK_DEBUG=1
 
 echo Starting webpack process
 echo Starting flask server
-#parallel -j 2 -- 'npm run --prefix ../client/ watch' 'python wsgi.py'
-python wsgi.py
+parallel -j 2 -- 'npm run --prefix ../client/ watch' 'python wsgi.py'
+#python wsgi.py

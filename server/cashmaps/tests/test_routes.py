@@ -5,7 +5,8 @@ import os
 
 from werkzeug.datastructures import FileStorage
 
-from cashmaps import db
+from cashmaps import db, queue
+from cashmaps.tasks import start_task
 from cashmaps.map.models import *
 from cashmaps.tests.fixtures import app, worker, browser
 from cashmaps.parsing.parsers.homeport_parser import parse_homeport
@@ -24,11 +25,10 @@ class TestRoutes:
         """
         Tests that the index/homepage route returns the right page.
         """
-        #browser.get(url_for('index', _external=True))
-        assert 1 == 1
-        #assert 'Cash Maps' in browser.title
-        #assert 'Homepage' in browser.page_source
-        
+        browser.get(url_for('index', _external=True))
+        assert 'Cash Maps' in browser.title
+        assert 'Homepage' in browser.page_source
+
 
     def test_route_parsers(self, browser):
         """
@@ -47,5 +47,26 @@ class TestRoutes:
         assert 'Cash Maps' in browser.title
 
 
+def func():
+    pass
 
+class TestPostCalls:
+    """
+    Tests misc POST routes that let the client perform certain tasks.
+    """
+
+    def test_rq_clear(self, app):
+        """
+        '/_rq_clear' clears the Redis Queue, used to clear up stale RQ jobs generated
+        in developments.
+        """
+        queue.empty()
+        client = app.test_client()
+        job = start_task(func)
+
+        assert len(queue.jobs) == 1
+
+        client.post('/_clear_rq')
+
+        assert len(queue.jobs) == 0
 

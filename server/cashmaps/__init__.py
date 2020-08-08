@@ -51,7 +51,7 @@ def create_app(ConfigClass):
         from cashmaps.uploader import uploader_bp
         app.register_blueprint(uploader_bp)
 
-        from cashmaps import routes, models
+        from cashmaps import routes
 
 
         return app

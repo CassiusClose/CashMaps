@@ -1,5 +1,4 @@
 from cashmaps import db
-from cashmaps.models import results_to_arr
 from flask import current_app
 import PIL
 from PIL import Image
@@ -28,4 +27,5 @@ class Photo(db.Model):
         return Photo.query.filter_by(relative_filepath=filepath).first()
 
     def get_photos():
-        return {'photos': results_to_arr(Photo.query.all())}
+        pass
+        #return {'photos': results_to_arr(Photo.query.all())}
