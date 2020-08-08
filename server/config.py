@@ -24,6 +24,8 @@ class BaseConfig():
 
 
 class DevConfig(BaseConfig):
+    DEBUG=True
+
 
     # Set unbuffered output, i.e., output is sent immediately to STDOUT instead
     # of being buffered
@@ -36,6 +38,8 @@ class DevConfig(BaseConfig):
 class TestConfig(BaseConfig):
     TESTING = True
     WTF_CSRF_ENABLED = False
+
+    DEBUG=True
 
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(BaseConfig.basedir + '/cashmaps/static/resources/test_db.db')
 
