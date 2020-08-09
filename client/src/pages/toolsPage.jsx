@@ -4,7 +4,7 @@ export default function ToolsPage(props) {
   const removeTracks = () => {
     $.ajax({
       url: "/map/_clear_data",
-      type: "POST",
+      type: "DELETE",
       success: function(response) {
         console.log("Cleared tracks"); 
       }
@@ -14,7 +14,7 @@ export default function ToolsPage(props) {
   const clearRQ = () => {
     $.ajax({
       url: "/_clear_rq",
-      type: "POST",
+      type: "DELETE",
       success: function(response) {
         console.log("Cleared Redis Queue");
       }

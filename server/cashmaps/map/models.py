@@ -13,7 +13,9 @@ class Track(db.Model):
     filename = db.Column(db.String(60))
 
     #Relates this track to its list of points
-    points = db.relationship('TrackPoint', cascade="all, delete", backref='track', lazy='dynamic')
+    # NOTE: Can't use Track.query.delete(), must use db.session.delete(), otherwise cascading
+    # will not work
+    points = db.relationship('TrackPoint', cascade="all,delete", backref='track', lazy='dynamic')
 
     def json(self):
         """

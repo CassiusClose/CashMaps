@@ -38,7 +38,7 @@ def tools():
 
 
 
-@current_app.route('/_clear_rq', methods=['POST'])
+@current_app.route('/_clear_rq', methods=['DELETE'])
 def clear_rq():
     """
     Removes all jobs from the Redis Queue. This is used for development:

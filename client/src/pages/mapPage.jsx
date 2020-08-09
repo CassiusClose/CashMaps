@@ -25,7 +25,7 @@ export default function CesiumMap(props) {
     var successFunc = set_track_data;
     $.ajax({
       url: "/map/_get_data",
-      type: "POST",
+      type: "GET",
       success: function(response) {
         successFunc(response.tracks);
       }
@@ -64,7 +64,7 @@ export default function CesiumMap(props) {
                 tracks != null &&
                 tracks.map((track) => (
                   <Polyline
-                    key={track.database_id}
+                    key={track.id}
                     positions={track.points}
                   />
                 ))

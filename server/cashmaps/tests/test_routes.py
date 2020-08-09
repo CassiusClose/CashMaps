@@ -26,7 +26,7 @@ class TestRoutes:
     page.
     """
 
-    def est_route_homepage(self, browser):
+    def test_route_homepage(self, browser):
         """
         Tests that the index/homepage route returns the right page.
         """
@@ -35,7 +35,7 @@ class TestRoutes:
         assert 'Homepage' in browser.page_source
 
 
-    def est_route_parsers(self, browser):
+    def test_route_parsers(self, browser):
         """
         Tests that the parser route returns the right page.
         """
@@ -73,7 +73,7 @@ class TestPostCalls:
 
         assert len(queue.jobs) == 1
 
-        client.post('/_clear_rq')
+        client.delete('/_clear_rq')
 
         assert len(queue.jobs) == 0
 
