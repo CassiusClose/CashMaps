@@ -23,5 +23,6 @@ temp/
 app/static/photos
 
 Production
+certs/
 
 *.swp

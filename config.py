@@ -4,8 +4,12 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 os.environ['PYTHONUNBUFFERED'] = "TRUE"
 
 class Config(object):
-    #For encryption or something
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'cash_MapS_Key_Babyy'
+
+    # Get secret key 
+    f = open("key.txt", "r")
+    f.read()
+
+    SECRET_KEY = os.environ.get('SECRET_KEY') or f.read()
 
     #Database location
     #sqlite: followed by 4 slashes is absolute, 3 is relative
