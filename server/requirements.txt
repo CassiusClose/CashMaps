@@ -2,7 +2,7 @@ alembic==1.0.11
 attrs==19.3.0
 -e git+https://github.com/CassiusClose/CashMaps.git@fbe945cc0d4d3639b19f64e65c82de8f4d2c1ff3#egg=cashmaps&subdirectory=server
 Click==7.0
-Django==2.0.13
+Django==2.2.13
 dnspython==1.16.0
 eventlet==0.25.2
 Flask==1.1.1
