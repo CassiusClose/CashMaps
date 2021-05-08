@@ -4,7 +4,7 @@ attrs==19.3.0
 Click==7.0
 Django==2.0.13
 dnspython==1.16.0
-eventlet==0.25.2
+eventlet==0.31.0
 Flask==1.1.1
 Flask-Migrate==2.5.2
 Flask-SocketIO==4.3.0
